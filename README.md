@@ -59,6 +59,8 @@ graph LR
 | Interactive Tables | Sub-second structured data queries |
 | Holly Agent | Orchestrates all tools with smooth chart rendering |
 | Daily refresh task | Keeps data current automatically |
+| Live price API | Real-time quotes via Yahoo Finance External Access |
+| Artifacts | Persistent, shareable, live-updating charts and tables |
 
 ## Prerequisites
 
@@ -80,6 +82,8 @@ graph LR
 | 5 | Holly Agent (20 sample questions) | 10 min | [step_5_holly_agent](./step_5_holly_agent/) |
 | 6 | Interactive Tables & Warehouses | 10 min | [step_6_interactive_tables](./step_6_interactive_tables/) |
 | 7 | Daily Data Refresh Task | 5 min | [step_7_daily_refresh](./step_7_daily_refresh/) |
+| 8 | External API for Live Prices | 10 min | [step_8_live_prices](./step_8_live_prices/) |
+| 9 | Artifacts (Save & Share) | 5 min | [step_9_artifacts](./step_9_artifacts/) |
 
 ## Schema Note
 

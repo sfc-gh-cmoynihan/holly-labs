@@ -29,6 +29,9 @@ graph LR
 1. In Snowsight, go to **Data Products > Marketplace**
 2. Search for **"Snowflake Public Data"**
 3. Click the listing by **Snowflake Inc.**
+
+![Snowflake Public Data Marketplace Listing](../images/snowflake_public_data_marketplace.png)
+
 4. Click **"Get"** to subscribe
 5. Accept the default database name: `SNOWFLAKE_PUBLIC_DATA_PAID`
 

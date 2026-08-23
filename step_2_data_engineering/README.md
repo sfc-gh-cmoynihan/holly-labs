@@ -50,10 +50,10 @@ Run `create_tables.sql` in Snowsight. The script:
 
 ### Key Design Decisions
 
+- **S&P 500 from Wikipedia** — a Python UDTF with External Access fetches the live list from Wikipedia, ensuring you always have the current index constituents (no stale hardcoded lists)
 - **3 schemas** separate structured (prices, fundamentals), semi-structured (filings), and unstructured (transcripts) data
 - **Clustering** on `(TICKER, DATE)` for fast time-series lookups
 - **Change tracking** enables Cortex Search incremental refresh without full reindexing
-- **Filtered to S&P 500** to keep initial data manageable (~10M rows vs 90M+)
 
 ## Verify It Worked
 

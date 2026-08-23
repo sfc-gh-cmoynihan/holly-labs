@@ -3,7 +3,8 @@
   Step 2: Data Engineering
   
   Create HOLLY_DB database and load data from Snowflake Marketplace.
-  Runtime: ~5-8 minutes (depending on data volume)
+  S&P 500 companies are fetched live from Wikipedia (always current).
+  Runtime: ~5-8 minutes
 ================================================================================
 */
 
@@ -21,43 +22,69 @@ CREATE SCHEMA IF NOT EXISTS HOLLY_DB.SEMI_STRUCTURED;
 CREATE SCHEMA IF NOT EXISTS HOLLY_DB.UNSTRUCTURED;
 
 -- ============================================================================
--- 2. S&P 500 COMPANIES REFERENCE TABLE
+-- 2. S&P 500 COMPANIES — FETCHED LIVE FROM WIKIPEDIA
+--    This ensures you always have the current index constituents.
 -- ============================================================================
 
-CREATE OR REPLACE TABLE HOLLY_DB.STRUCTURED.SP500_COMPANIES (
+-- 2.1 Create External Access Integration (allows Python to reach Wikipedia)
+CREATE OR REPLACE NETWORK RULE HOLLY_DB.STRUCTURED.WIKIPEDIA_NETWORK_RULE
+    MODE = EGRESS
+    TYPE = HOST_PORT
+    VALUE_LIST = ('en.wikipedia.org');
+
+CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION WIKIPEDIA_ACCESS
+    ALLOWED_NETWORK_RULES = (HOLLY_DB.STRUCTURED.WIKIPEDIA_NETWORK_RULE)
+    ENABLED = TRUE;
+
+-- 2.2 Create Python UDF that scrapes S&P 500 table from Wikipedia
+CREATE OR REPLACE FUNCTION HOLLY_DB.STRUCTURED.GET_SP500_COMPANIES()
+RETURNS TABLE (
     SYMBOL VARCHAR,
     COMPANY_NAME VARCHAR,
     SECTOR VARCHAR,
     INDUSTRY VARCHAR,
     HEADQUARTERS VARCHAR,
-    DATE_ADDED DATE,
+    DATE_ADDED VARCHAR,
     CIK VARCHAR,
     FOUNDED VARCHAR
-);
+)
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.11'
+PACKAGES = ('pandas', 'requests', 'lxml')
+EXTERNAL_ACCESS_INTEGRATIONS = (WIKIPEDIA_ACCESS)
+HANDLER = 'get_sp500'
+AS $$
+import pandas as pd
+import requests
 
--- Load top 20 S&P 500 companies by market cap (for the quickstart)
--- Full list: see the main holly repo INSTALL.sql for all 503 companies
-INSERT INTO HOLLY_DB.STRUCTURED.SP500_COMPANIES VALUES
-    ('AAPL', 'Apple Inc.', 'Information Technology', 'Technology Hardware, Storage & Peripherals', 'Cupertino, California', '1982-11-30', '320193', '1977'),
-    ('MSFT', 'Microsoft', 'Information Technology', 'Systems Software', 'Redmond, Washington', '1994-06-01', '789019', '1975'),
-    ('NVDA', 'Nvidia', 'Information Technology', 'Semiconductors', 'Santa Clara, California', '2001-11-30', '1045810', '1993'),
-    ('AMZN', 'Amazon', 'Consumer Discretionary', 'Broadline Retail', 'Seattle, Washington', '2005-11-18', '1018724', '1994'),
-    ('GOOGL', 'Alphabet Inc. (Class A)', 'Communication Services', 'Interactive Media & Services', 'Mountain View, California', '2014-04-03', '1652044', '1998'),
-    ('META', 'Meta Platforms', 'Communication Services', 'Interactive Media & Services', 'Menlo Park, California', '2013-12-23', '1326801', '2004'),
-    ('TSLA', 'Tesla, Inc.', 'Consumer Discretionary', 'Automobile Manufacturers', 'Austin, Texas', '2020-12-21', '1318605', '2003'),
-    ('AVGO', 'Broadcom', 'Information Technology', 'Semiconductors', 'Palo Alto, California', '2014-05-08', '1730168', '1961'),
-    ('JPM', 'JPMorgan Chase', 'Financials', 'Diversified Banks', 'New York City, New York', '1975-06-30', '19617', '2000'),
-    ('LLY', 'Lilly (Eli)', 'Health Care', 'Pharmaceuticals', 'Indianapolis, Indiana', '1970-12-31', '59478', '1876'),
-    ('V', 'Visa Inc.', 'Financials', 'Transaction & Payment Processing Services', 'San Francisco, California', '2009-12-21', '1403161', '1958'),
-    ('UNH', 'UnitedHealth Group', 'Health Care', 'Managed Health Care', 'Minnetonka, Minnesota', '1994-07-01', '731766', '1977'),
-    ('XOM', 'ExxonMobil', 'Energy', 'Integrated Oil & Gas', 'Irving, Texas', '1957-03-04', '34088', '1999'),
-    ('MA', 'Mastercard', 'Financials', 'Transaction & Payment Processing Services', 'Harrison, New York', '2008-07-18', '1141391', '1966'),
-    ('JNJ', 'Johnson & Johnson', 'Health Care', 'Pharmaceuticals', 'New Brunswick, New Jersey', '1973-06-30', '200406', '1886'),
-    ('COST', 'Costco', 'Consumer Staples', 'Consumer Staples Merchandise Retail', 'Issaquah, Washington', '1993-10-01', '909832', '1976'),
-    ('HD', 'Home Depot (The)', 'Consumer Discretionary', 'Home Improvement Retail', 'Atlanta, Georgia', '1988-03-31', '354950', '1978'),
-    ('PG', 'Procter & Gamble', 'Consumer Staples', 'Personal Care Products', 'Cincinnati, Ohio', '1957-03-04', '80424', '1837'),
-    ('NFLX', 'Netflix', 'Communication Services', 'Movies & Entertainment', 'Los Gatos, California', '2010-12-20', '1065280', '1997'),
-    ('CRM', 'Salesforce', 'Information Technology', 'Application Software', 'San Francisco, California', '2008-09-15', '1108524', '1999');
+class get_sp500:
+    def process(self):
+        url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+        headers = {'User-Agent': 'Snowflake-Holly-Labs/1.0'}
+        response = requests.get(url, headers=headers)
+        tables = pd.read_html(response.text)
+        df = tables[0]
+        
+        for _, row in df.iterrows():
+            yield (
+                str(row.get('Symbol', '')).strip(),
+                str(row.get('Security', '')).strip(),
+                str(row.get('GICS Sector', '')).strip(),
+                str(row.get('GICS Sub-Industry', '')).strip(),
+                str(row.get('Headquarters Location', '')).strip(),
+                str(row.get('Date added', '')).strip(),
+                str(row.get('CIK', '')).strip(),
+                str(row.get('Founded', '')).strip()
+            )
+$$;
+
+-- 2.3 Load S&P 500 companies from Wikipedia into table
+CREATE OR REPLACE TABLE HOLLY_DB.STRUCTURED.SP500_COMPANIES AS
+SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_SP500_COMPANIES());
+
+-- Verify: should be ~503 companies
+SELECT COUNT(*) AS SP500_COUNT FROM HOLLY_DB.STRUCTURED.SP500_COMPANIES;
+SELECT * FROM HOLLY_DB.STRUCTURED.SP500_COMPANIES LIMIT 10;
 
 -- ============================================================================
 -- 3. STOCK PRICE DATA (S&P 500 companies from Marketplace)
