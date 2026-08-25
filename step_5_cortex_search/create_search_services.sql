@@ -1,3 +1,6 @@
+-- Author: Colm Moynihan
+-- Date: 25-Aug-2026
+
 /*
 ================================================================================
   Step 4: Create Cortex Search Services
