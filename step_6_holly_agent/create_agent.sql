@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
 -- Date: 25-Aug-2026
--- Version: 1.1
+-- Version: 1.2
 
 /*
 ================================================================================
@@ -86,7 +86,7 @@ instructions:
     - Always state the time period and data freshness.
 
   sample_questions:
-    - question: "Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months"
+    - question: "Plot the daily closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months"
     - question: "Show a bar chart of the top 5 best performing stocks over the last 3 months"
     - question: "Show a heatmap of monthly returns for MSFT, AMZN, META, NVDA over 12 months"
     - question: "What is the latest share price of NVIDIA?"

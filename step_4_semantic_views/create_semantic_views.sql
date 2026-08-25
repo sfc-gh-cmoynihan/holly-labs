@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
 -- Date: 25-Aug-2026
--- Version: 1.2
+-- Version: 1.3
 
 /*
 ================================================================================
@@ -34,7 +34,7 @@ CREATE OR REPLACE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV
     STOCK_PRICE_TIMESERIES.DATE AS DATE
       comment='Trading date. Use ORDER BY DATE, TICKER for time series queries.'
   )
-  COMMENT = 'S&P 500 daily stock prices. Use VARIABLE_NAME = Post-Market Close for closing prices. For charts, use DATE_TRUNC(WEEK) with AVG for smooth rendering.'
+  COMMENT = 'S&P 500 daily stock prices. Use VARIABLE_NAME = Post-Market Close for closing prices. For 6-month charts use daily data; for 12-month charts use DATE_TRUNC(WEEK) with AVG.'
   AI_VERIFIED_QUERIES (
     "Plot the share price of Microsoft, Amazon, Google, and Nvidia over the last 12 months" AS (
       QUESTION 'Plot the share price of Microsoft, Amazon, Google, and Nvidia over the last 12 months'
@@ -42,6 +42,13 @@ CREATE OR REPLACE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV
       VERIFIED_BY 'ADMIN'
       ONBOARDING_QUESTION true
       SQL 'SELECT DATE_TRUNC(''WEEK'', DATE) AS WEEK, TICKER, ROUND(AVG(VALUE), 2) AS SHARE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES WHERE TICKER IN (''MSFT'', ''AMZN'', ''GOOGL'', ''NVDA'') AND VARIABLE_NAME = ''Post-Market Close'' AND DATE >= DATEADD(MONTH, -12, CURRENT_DATE()) GROUP BY DATE_TRUNC(''WEEK'', DATE), TICKER ORDER BY WEEK, TICKER'
+    ),
+    "Plot the daily closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months" AS (
+      QUESTION 'Plot the daily closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months'
+      VERIFIED_AT 1743552000
+      VERIFIED_BY 'ADMIN'
+      ONBOARDING_QUESTION true
+      SQL 'SELECT DATE, TICKER, VALUE AS SHARE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES WHERE TICKER IN (''MSFT'', ''AMZN'', ''GOOGL'', ''NVDA'') AND VARIABLE_NAME = ''Post-Market Close'' AND DATE >= DATEADD(MONTH, -6, CURRENT_DATE()) ORDER BY DATE, TICKER'
     ),
     "What is the latest share price of NVIDIA?" AS (
       QUESTION 'What is the latest share price of NVIDIA?'
