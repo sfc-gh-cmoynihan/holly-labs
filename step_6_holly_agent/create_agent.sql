@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
 -- Date: 25-Aug-2026
--- Version: 1.0
+-- Version: 1.1
 
 /*
 ================================================================================
@@ -131,6 +131,7 @@ tools:
         Data: Filing text, company name, filing type, date, fiscal period.
         When to Use: Questions about what filings say, disclosures, risk factors, revenue growth.
         When NOT to Use: Stock prices or company membership queries.
+        IMPORTANT: When the question is about a specific company, ALWAYS filter by COMPANY_NAME to narrow results.
   - tool_spec:
       type: cortex_search
       name: TRANSCRIPTS_SEARCH
@@ -139,6 +140,7 @@ tools:
         Data: Transcript text, company name, ticker, event type, fiscal period.
         When to Use: Questions about what management said, guidance, commentary.
         When NOT to Use: Stock prices, SEC filings, or company fundamentals.
+        IMPORTANT: When the question is about a specific company or executive, ALWAYS filter by PRIMARY_TICKER (e.g. NVDA for NVIDIA/Jensen Huang, AMZN for Amazon, META for Meta).
   - tool_spec:
       type: web_search
       name: WEB_SEARCH
