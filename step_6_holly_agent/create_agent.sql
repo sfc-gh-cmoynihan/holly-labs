@@ -13,8 +13,8 @@
 USE ROLE ACCOUNTADMIN;
 
 -- Create the Intelligence schema if it doesn't exist
-CREATE DATABASE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE;
-CREATE SCHEMA IF NOT EXISTS SNOWFLAKE_INTELLIGENCE.AGENTS;
+CREATE DATABASE IF NOT EXISTS COWORK;
+CREATE SCHEMA IF NOT EXISTS COWORK.AGENTS;
 
 -- Enable required account settings
 ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
@@ -24,7 +24,7 @@ ALTER ACCOUNT SET ENABLE_CORTEX_WEBSEARCH = TRUE;
 -- CREATE THE HOLLY AGENT
 -- ============================================================================
 
-CREATE OR REPLACE AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.HOLLY
+CREATE OR REPLACE AGENT COWORK.AGENTS.HOLLY
   COMMENT = 'Financial research assistant for stock prices, SEC filings, and earnings transcripts'
   FROM SPECIFICATION $$
 models:
@@ -191,7 +191,7 @@ tool_resources:
 $$;
 
 -- Grant access
-GRANT USAGE ON AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.HOLLY TO ROLE PUBLIC;
+GRANT USAGE ON AGENT COWORK.AGENTS.HOLLY TO ROLE PUBLIC;
 
 -- Set display profile
-ALTER AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.HOLLY SET PROFILE = '{"display_name": "Holly - Financial Research Agent", "avatar": "RobotAgentIcon", "color": "var(--chartDim_3-x11ij0mo)"}';
+ALTER AGENT COWORK.AGENTS.HOLLY SET PROFILE = '{"display_name": "Holly - Financial Research Agent", "avatar": "RobotAgentIcon", "color": "var(--chartDim_3-x11ij0mo)"}';
