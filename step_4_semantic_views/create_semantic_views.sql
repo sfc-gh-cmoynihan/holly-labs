@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
 -- Date: 25-Aug-2026
--- Version: 1.3
+-- Version: 1.4
 
 /*
 ================================================================================
@@ -34,17 +34,17 @@ CREATE OR REPLACE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV
     STOCK_PRICE_TIMESERIES.DATE AS DATE
       comment='Trading date. Use ORDER BY DATE, TICKER for time series queries.'
   )
-  COMMENT = 'S&P 500 daily stock prices. Use VARIABLE_NAME = Post-Market Close for closing prices. For 6-month charts use daily data; for 12-month charts use DATE_TRUNC(WEEK) with AVG.'
+  COMMENT = 'S&P 500 daily stock prices. Use VARIABLE_NAME = Post-Market Close for closing prices. For charts, return daily data (DATE, TICKER, VALUE) — do NOT use DATE_TRUNC or weekly averaging.'
   AI_VERIFIED_QUERIES (
     "Plot the share price of Microsoft, Amazon, Google, and Nvidia over the last 12 months" AS (
       QUESTION 'Plot the share price of Microsoft, Amazon, Google, and Nvidia over the last 12 months'
       VERIFIED_AT 1743552000
       VERIFIED_BY 'ADMIN'
       ONBOARDING_QUESTION true
-      SQL 'SELECT DATE_TRUNC(''WEEK'', DATE) AS WEEK, TICKER, ROUND(AVG(VALUE), 2) AS SHARE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES WHERE TICKER IN (''MSFT'', ''AMZN'', ''GOOGL'', ''NVDA'') AND VARIABLE_NAME = ''Post-Market Close'' AND DATE >= DATEADD(MONTH, -12, CURRENT_DATE()) GROUP BY DATE_TRUNC(''WEEK'', DATE), TICKER ORDER BY WEEK, TICKER'
+      SQL 'SELECT DATE, TICKER, VALUE AS SHARE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES WHERE TICKER IN (''MSFT'', ''AMZN'', ''GOOGL'', ''NVDA'') AND VARIABLE_NAME = ''Post-Market Close'' AND DATE >= DATEADD(MONTH, -12, CURRENT_DATE()) ORDER BY DATE, TICKER'
     ),
-    "Plot the daily closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months" AS (
-      QUESTION 'Plot the daily closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months'
+    "Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months" AS (
+      QUESTION 'Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months'
       VERIFIED_AT 1743552000
       VERIFIED_BY 'ADMIN'
       ONBOARDING_QUESTION true
