@@ -1,4 +1,4 @@
-# Step 8: External API for Live Stock Prices
+# Step 9: External API for Live Stock Prices
 
 **Time: 10 minutes**
 
@@ -82,4 +82,4 @@ SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('AAPL'));
 
 ## Next Step
 
-[Step 9: Artifacts →](../step_9_artifacts/)
+[Step 10: Artifacts →](../step_10_artifacts/)

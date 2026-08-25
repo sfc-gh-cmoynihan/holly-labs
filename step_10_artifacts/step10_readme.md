@@ -1,4 +1,4 @@
-# Step 9: Artifacts
+# Step 10: Artifacts
 
 **Time: 5 minutes**
 
@@ -119,13 +119,15 @@ Try saving these as artifacts for your daily workflow:
 ## You're Done!
 
 You've built a complete financial research agent with:
-- Live marketplace data (Step 1-2)
-- AI-powered structured queries (Step 3)
-- Semantic search over filings and transcripts (Step 4)
-- Intelligent orchestration with 20 sample questions (Step 5)
-- Sub-second interactive performance (Step 6)
-- Automatic daily refresh (Step 7)
-- Real-time external API prices (Step 8)
-- Persistent, shareable artifacts (Step 9)
+- Live marketplace data (Step 1)
+- Git integration (Step 2)
+- Data engineering (Step 3)
+- AI-powered structured queries (Step 4)
+- Semantic search over filings and transcripts (Step 5)
+- Intelligent orchestration with 20 sample questions (Step 6)
+- Sub-second interactive performance (Step 7)
+- Automatic daily refresh (Step 8)
+- Real-time external API prices (Step 9)
+- Persistent, shareable artifacts (Step 10)
 
 [← Back to README](../README.md)

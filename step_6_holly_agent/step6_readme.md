@@ -1,4 +1,4 @@
-# Step 5: Holly Agent
+# Step 6: Holly Agent
 
 **Time: 10 minutes**
 
@@ -103,4 +103,4 @@ Then open **Snowflake CoWork** and ask: "What is the latest share price of NVIDI
 
 ## Next Step
 
-[Step 6: Interactive Tables & Warehouses →](../step_6_interactive_tables/)
+[Step 7: Interactive Tables & Warehouses →](../step_7_interactive_tables/)

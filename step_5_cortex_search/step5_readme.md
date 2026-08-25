@@ -1,4 +1,4 @@
-# Step 4: Cortex Search
+# Step 5: Cortex Search
 
 **Time: 10 minutes**
 
@@ -83,4 +83,4 @@ SELECT SNOWFLAKE.CORTEX.SEARCH_PREVIEW(
 
 ## Next Step
 
-[Step 5: Holly Agent →](../step_5_holly_agent/)
+[Step 6: Holly Agent →](../step_6_holly_agent/)

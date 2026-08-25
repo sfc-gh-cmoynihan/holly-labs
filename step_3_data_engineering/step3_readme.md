@@ -1,4 +1,4 @@
-# Step 2: Data Engineering
+# Step 3: Data Engineering
 
 **Time: 10 minutes**
 
@@ -82,4 +82,4 @@ Expected: ~503 companies, ~10M price rows, ~50K+ filings, ~5K+ transcripts.
 
 ## Next Step
 
-[Step 3: Semantic Views →](../step_3_semantic_views/)
+[Step 4: Semantic Views →](../step_4_semantic_views/)

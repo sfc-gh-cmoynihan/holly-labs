@@ -1,4 +1,4 @@
-# Step 7: Daily Data Refresh
+# Step 8: Daily Data Refresh
 
 **Time: 5 minutes**
 
