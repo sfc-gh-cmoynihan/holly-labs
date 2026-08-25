@@ -11,9 +11,7 @@
 USE ROLE ACCOUNTADMIN;
 CREATE WAREHOUSE IF NOT EXISTS HOLLY_AD_WH
     WAREHOUSE_TYPE = 'ADAPTIVE'
-    WAREHOUSE_SIZE = 'XSMALL'
-    AUTO_SUSPEND = 300
-    AUTO_RESUME = TRUE;
+    WAREHOUSE_SIZE = 'XSMALL';
 USE WAREHOUSE HOLLY_AD_WH;
 
 -- ============================================================================
