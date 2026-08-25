@@ -1,4 +1,4 @@
-# Step 10: Artifacts
+# Step 9: Artifacts
 
 **Time: 5 minutes**
 
@@ -126,8 +126,7 @@ You've built a complete financial research agent with:
 - Semantic search over filings and transcripts (Step 5)
 - Intelligent orchestration with 20 sample questions (Step 6)
 - Sub-second interactive performance (Step 7)
-- Automatic daily refresh (Step 8)
-- Real-time external API prices (Step 9)
-- Persistent, shareable artifacts (Step 10)
+- Automatic daily refresh & live prices (Step 8)
+- Persistent, shareable artifacts (Step 9)
 
 [← Back to README](../README.md)

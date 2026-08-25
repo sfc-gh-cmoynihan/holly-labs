@@ -1,6 +1,6 @@
-# Step 8: Daily Data Refresh
+# Step 8: Daily Data Refresh & Live Prices
 
-**Time: 5 minutes**
+**Time: 10 minutes**
 
 ## What You'll Build
 
@@ -94,13 +94,48 @@ ORDER BY SCHEDULED_TIME DESC;
 
 **Key advantage:** The entire data refresh pipeline — from marketplace ingestion through to searchable AI-ready content — is a single SQL task with a MERGE statement. No external orchestration, no custom code, no reindexing scripts. Change tracking bridges the gap between the task (which inserts rows) and Cortex Search (which needs to know what changed).
 
-## You're Done!
+---
 
-Open **Snowflake CoWork** and start asking Holly questions:
+## 8B: External API for Live Stock Prices
 
-- "What is the latest share price of NVIDIA?"
-- "Plot the closing price of MSFT, AMZN, GOOGL over the last 6 months"
-- "What did Apple disclose about AI in their most recent filing?"
-- "What guidance did Amazon give in their latest earnings call?"
+Add a live stock price tool to Holly using Yahoo Finance via an External Access Integration — giving Holly real-time intraday prices alongside historical data.
+
+### What is an External Access Integration?
+
+External Access Integrations allow Snowflake UDFs and stored procedures to make HTTP calls to external services. You define:
+1. **Network Rule** — which hosts are allowed (whitelist)
+2. **Integration** — ties the rule to a name that can be granted to functions
+3. **Function** — Python/Java/JS code that calls the external API
+
+This keeps external access governed and auditable — no open internet access, only explicitly approved endpoints.
+
+### How It Works
+
+The `GET_LIVE_PRICE` function:
+- Calls Yahoo Finance's quote API endpoint
+- Returns ticker, current price, day change, percent change, and market state
+- Can be called directly or integrated as an agent tool
+
+### Verify Live Prices
+
+```sql
+SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('NVDA'));
+SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('MSFT'));
+SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('AAPL'));
+```
+
+| Traditional Approach | External Access Integration |
+|---------------------|---------------------------|
+| Separate microservice for API calls | Python UDF runs inside Snowflake — no external infra |
+| API keys in environment variables | Secrets stored in Snowflake secret objects (encrypted) |
+| Open network access from compute | Whitelisted hosts only — governed and auditable |
+| Data leaves your perimeter for processing | API response stays within Snowflake's secure boundary |
+| Separate monitoring and logging | Integrated with Snowflake's query history and access controls |
+
+---
+
+## Next Step
+
+[Step 9: Artifacts →](../step_9_artifacts/)
 
 [← Back to README](../README.md)
