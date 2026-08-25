@@ -26,17 +26,17 @@ Holly Labs is a hands-on lab that walks you through building a production-grade 
 
 The lab consists of 9 steps that **must be executed in order** (each step depends on objects created in prior steps):
 
-| Step | Folder | Description |
-|------|--------|-------------|
-| 1 | `step_1_get_data/` | Install S&P 500 market data from the Snowflake Marketplace |
-| 2 | `step_2_git_integration/` | Connect this repo to a Snowflake Git Workspace |
-| 3 | `step_3_data_engineering/` | Build structured tables from raw Marketplace data |
-| 4 | `step_4_semantic_views/` | Create Semantic Views with verified queries for Cortex Analyst |
-| 5 | `step_5_cortex_search/` | Create Cortex Search Services over SEC filings and transcripts |
-| 6 | `step_6_holly_agent/` | Deploy the Holly agent with 6 tools and sample questions |
-| 7 | `step_7_interactive_tables/` | Add Interactive Tables and Interactive Warehouse for sub-second queries |
-| 8 | `step_8_daily_refresh/` | Schedule a daily task to keep data fresh |
-| 9 | `step_9_artifacts/` | Save and share agent outputs as persistent CoWork artifacts |
+| Step | Readme | .sql |
+|------|--------|------|
+| 1 — Install S&P 500 market data from the Snowflake Marketplace | [step1_readme.md](step_1_get_data/step1_readme.md) | [get_data.sql](step_1_get_data/get_data.sql) |
+| 2 — Connect this repo to a Snowflake Git Workspace | [step2_readme.md](step_2_git_integration/step2_readme.md) | — |
+| 3 — Build structured tables from raw Marketplace data | [step3_readme.md](step_3_data_engineering/step3_readme.md) | [data_engineering.sql](step_3_data_engineering/data_engineering.sql) |
+| 4 — Create Semantic Views with verified queries for Cortex Analyst | [step4_readme.md](step_4_semantic_views/step4_readme.md) | [create_semantic_views.sql](step_4_semantic_views/create_semantic_views.sql) |
+| 5 — Create Cortex Search Services over SEC filings and transcripts | [step5_readme.md](step_5_cortex_search/step5_readme.md) | [create_search_services.sql](step_5_cortex_search/create_search_services.sql) |
+| 6 — Deploy the Holly agent with 6 tools and sample questions | [step6_readme.md](step_6_holly_agent/step6_readme.md) | [create_agent.sql](step_6_holly_agent/create_agent.sql) |
+| 7 — Add Interactive Tables and Interactive Warehouse for sub-second queries | [step7_readme.md](step_7_interactive_tables/step7_readme.md) | [create_interactive.sql](step_7_interactive_tables/create_interactive.sql) |
+| 8 — Create a tasks schedule that calls a sproc to execute the update daily | [step8_readme.md](step_8_daily_refresh/step8_readme.md) | [create_task.sql](step_8_daily_refresh/create_task.sql) |
+| 9 — How to create artifacts and schedule automations | [step9_readme.md](step_9_artifacts/step9_readme.md) | — |
 
 ## How to Run
 
