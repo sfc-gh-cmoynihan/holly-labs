@@ -51,19 +51,21 @@ RETURNS TABLE (
 )
 LANGUAGE PYTHON
 RUNTIME_VERSION = '3.11'
-PACKAGES = ('pandas', 'requests', 'lxml')
+PACKAGES = ('pandas', 'requests', 'html5lib', 'beautifulsoup4')
 EXTERNAL_ACCESS_INTEGRATIONS = (WIKIPEDIA_ACCESS)
 HANDLER = 'get_sp500'
 AS $$
 import pandas as pd
 import requests
+from io import StringIO
 
 class get_sp500:
     def process(self):
         url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
         headers = {'User-Agent': 'Snowflake-Holly-Labs/1.0'}
         response = requests.get(url, headers=headers)
-        tables = pd.read_html(response.text)
+        response.raise_for_status()
+        tables = pd.read_html(StringIO(response.text), flavor='html5lib')
         df = tables[0]
         
         for _, row in df.iterrows():
