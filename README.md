@@ -28,15 +28,15 @@ The lab consists of 9 steps that **must be executed in order** (each step depend
 
 | Step | Readme | .sql |
 |------|--------|------|
-| 1 — Install S&P 500 market data from the Snowflake Marketplace | [step1_readme.md](step_1_get_data/step1_readme.md) | [get_data.sql](step_1_get_data/get_data.sql) |
-| 2 — Connect this repo to a Snowflake Git Workspace | [step2_readme.md](step_2_git_integration/step2_readme.md) | — |
-| 3 — Build structured tables from raw Marketplace data | [step3_readme.md](step_3_data_engineering/step3_readme.md) | [data_engineering.sql](step_3_data_engineering/data_engineering.sql) |
-| 4 — Create Semantic Views with verified queries for Cortex Analyst | [step4_readme.md](step_4_semantic_views/step4_readme.md) | [create_semantic_views.sql](step_4_semantic_views/create_semantic_views.sql) |
-| 5 — Create Cortex Search Services over SEC filings and transcripts | [step5_readme.md](step_5_cortex_search/step5_readme.md) | [create_search_services.sql](step_5_cortex_search/create_search_services.sql) |
-| 6 — Deploy the Holly agent with 6 tools and sample questions | [step6_readme.md](step_6_holly_agent/step6_readme.md) | [create_agent.sql](step_6_holly_agent/create_agent.sql) |
-| 7 — Add Interactive Tables and Interactive Warehouse for sub-second queries | [step7_readme.md](step_7_interactive_tables/step7_readme.md) | [create_interactive.sql](step_7_interactive_tables/create_interactive.sql) |
-| 8 — Create a tasks schedule that calls a sproc to execute the update daily | [step8_readme.md](step_8_daily_refresh/step8_readme.md) | [create_task.sql](step_8_daily_refresh/create_task.sql) |
-| 9 — How to create artifacts and schedule automations | [step9_readme.md](step_9_artifacts/step9_readme.md) | — |
+| 1 — Get Data | [step1](step_1_get_data/step1_readme.md) | [get_data.sql](step_1_get_data/get_data.sql) |
+| 2 — Git Integration | [step2](step_2_git_integration/step2_readme.md) | — |
+| 3 — Data Engineering | [step3](step_3_data_engineering/step3_readme.md) | [data_engineering.sql](step_3_data_engineering/data_engineering.sql) |
+| 4 — Semantic Views | [step4](step_4_semantic_views/step4_readme.md) | [create_semantic_views.sql](step_4_semantic_views/create_semantic_views.sql) |
+| 5 — Cortex Search | [step5](step_5_cortex_search/step5_readme.md) | [create_search_services.sql](step_5_cortex_search/create_search_services.sql) |
+| 6 — Holly Agent | [step6](step_6_holly_agent/step6_readme.md) | [create_agent.sql](step_6_holly_agent/create_agent.sql) |
+| 7 — Interactive Tables | [step7](step_7_interactive_tables/step7_readme.md) | [create_interactive.sql](step_7_interactive_tables/create_interactive.sql) |
+| 8 — Daily Refresh: Create a task to refresh the data from the marketplace | [step8](step_8_daily_refresh/step8_readme.md) | [create_task.sql](step_8_daily_refresh/create_task.sql) |
+| 9 — Artifacts: Create artifacts and create automations | [step9](step_9_artifacts/step9_readme.md) | — |
 
 ## How to Run
 
