@@ -13,7 +13,7 @@
 */
 
 USE ROLE ACCOUNTADMIN;
-USE WAREHOUSE HOLLY_WH;
+USE WAREHOUSE HOLLY_AD_WH;
 
 -- ============================================================================
 -- CREATE THE DAILY REFRESH TASK
