@@ -35,7 +35,7 @@ The lab consists of 9 steps that **must be executed in order** (each step depend
 | 4 — Create Semantic Views with verified queries for Cortex Analyst | [step4.md](step_4_semantic_views/step4.md) | [create_semantic_views.sql](step_4_semantic_views/create_semantic_views.sql) |
 | 5 — Create Cortex Search Services over SEC filings and transcripts | [step5.md](step_5_cortex_search/step5.md) | [create_search_services.sql](step_5_cortex_search/create_search_services.sql) |
 | 6 — Deploy the Holly agent with 6 tools and sample questions | [step6.md](step_6_holly_agent/step6.md) | [create_agent.sql](step_6_holly_agent/create_agent.sql) |
-| 7 — Add Interactive Tables and Interactive Warehouse for sub-second queries | [step7.md](step_7_interactive_tables/step7.md) | [create_interactive.sql](step_7_interactive_tables/create_interactive.sql) |
+| 7 — Interactive Tables & Warehouses for sub-second queries | [step7.md](step_7_interactive_tables/step7.md) | [create_interactive.sql](step_7_interactive_tables/create_interactive.sql) |
 | 8 — Daily Refresh: Create a task to refresh the data | [step8.md](step_8_daily_refresh/step8.md) | [create_task.sql](step_8_daily_refresh/create_task.sql) |
 | 9 — How to create artifacts and schedule automations | [step9.md](step_9_artifacts/step9.md) | — |
 
