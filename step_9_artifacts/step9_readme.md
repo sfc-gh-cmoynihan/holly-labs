@@ -1,6 +1,6 @@
 # Step 9: Artifacts
 
-**Time: 5 minutes**
+**Time: 10 minutes**
 
 ## What You'll Build
 
