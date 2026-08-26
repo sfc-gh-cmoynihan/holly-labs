@@ -83,6 +83,28 @@ BEGIN
   WHEN NOT MATCHED THEN
     INSERT (COMPANY_ID, CIK, COMPANY_NAME, PRIMARY_TICKER, FISCAL_PERIOD, FISCAL_YEAR, EVENT_TYPE, TRANSCRIPT, EVENT_TIMESTAMP)
     VALUES (source.COMPANY_ID, source.CIK, source.COMPANY_NAME, source.PRIMARY_TICKER, source.FISCAL_PERIOD, source.FISCAL_YEAR, source.EVENT_TYPE, source.TRANSCRIPT, source.EVENT_TIMESTAMP);
+
+  -- ========================================================================
+  -- 3. MERGE new FX rates from marketplace
+  -- ========================================================================
+  MERGE INTO HOLLY_DB.STRUCTURED.FX_RATES AS target
+  USING (
+    SELECT 
+      BASE_CURRENCY_ID, QUOTE_CURRENCY_ID,
+      BASE_CURRENCY_NAME, QUOTE_CURRENCY_NAME,
+      VARIABLE, VARIABLE_NAME, DATE, VALUE
+    FROM SNOWFLAKE_PUBLIC_DATA_PAID.PUBLIC_DATA.FX_RATES_TIMESERIES
+    WHERE BASE_CURRENCY_ID IN ('USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD')
+      AND QUOTE_CURRENCY_ID IN ('USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD')
+      AND BASE_CURRENCY_ID != QUOTE_CURRENCY_ID
+      AND DATE >= DATEADD(DAY, -7, CURRENT_DATE())
+  ) AS source
+  ON target.BASE_CURRENCY_ID = source.BASE_CURRENCY_ID
+     AND target.QUOTE_CURRENCY_ID = source.QUOTE_CURRENCY_ID
+     AND target.DATE = source.DATE
+  WHEN NOT MATCHED THEN
+    INSERT (BASE_CURRENCY_ID, QUOTE_CURRENCY_ID, BASE_CURRENCY_NAME, QUOTE_CURRENCY_NAME, VARIABLE, VARIABLE_NAME, DATE, VALUE)
+    VALUES (source.BASE_CURRENCY_ID, source.QUOTE_CURRENCY_ID, source.BASE_CURRENCY_NAME, source.QUOTE_CURRENCY_NAME, source.VARIABLE, source.VARIABLE_NAME, source.DATE, source.VALUE);
 END;
 
 -- ============================================================================
@@ -177,3 +199,69 @@ $$;
 SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('NVDA'));
 SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('AAPL'));
 SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('MSFT'));
+
+-- ============================================================================
+-- 8C. LIVE FX RATE UDF
+--     Fetch real-time exchange rates via Yahoo Finance (e.g. EURUSD=X)
+-- ============================================================================
+
+CREATE OR REPLACE FUNCTION HOLLY_DB.STRUCTURED.GET_LIVE_FX_RATE(CURRENCY_PAIR VARCHAR)
+RETURNS TABLE (
+    PAIR VARCHAR,
+    RATE FLOAT,
+    DAY_CHANGE FLOAT,
+    DAY_CHANGE_PCT FLOAT,
+    MARKET_STATE VARCHAR,
+    TIMESTAMP VARCHAR
+)
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.11'
+PACKAGES = ('requests')
+EXTERNAL_ACCESS_INTEGRATIONS = (YAHOO_FINANCE_ACCESS)
+HANDLER = 'get_live_fx_rate'
+AS $$
+import requests
+from datetime import datetime
+
+class get_live_fx_rate:
+    def process(self, currency_pair: str):
+        # Accept formats: "EURUSD", "EUR/USD", "EURUSD=X"
+        pair = currency_pair.upper().replace('/', '').replace('=X', '')
+        symbol = f'{pair}=X'
+        
+        url = f'https://query1.finance.yahoo.com/v8/finance/chart/{symbol}'
+        params = {'interval': '1d', 'range': '1d'}
+        headers = {'User-Agent': 'Snowflake-Holly-Labs/1.0'}
+        
+        try:
+            response = requests.get(url, params=params, headers=headers, timeout=10)
+            data = response.json()
+            
+            meta = data['chart']['result'][0]['meta']
+            rate = meta.get('regularMarketPrice', 0)
+            prev_close = meta.get('previousClose', 0)
+            change = round(rate - prev_close, 4) if prev_close else 0
+            change_pct = round((change / prev_close) * 100, 4) if prev_close else 0
+            
+            yield (
+                pair[:3] + '/' + pair[3:],
+                float(rate),
+                float(change),
+                float(change_pct),
+                meta.get('marketState', 'UNKNOWN'),
+                datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            )
+        except Exception as e:
+            yield (
+                pair[:3] + '/' + pair[3:],
+                0.0,
+                0.0,
+                0.0,
+                'ERROR: ' + str(e)[:50],
+                datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            )
+$$;
+
+-- Test live FX rates
+SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_FX_RATE('EURUSD'));
+SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_FX_RATE('GBPUSD'));

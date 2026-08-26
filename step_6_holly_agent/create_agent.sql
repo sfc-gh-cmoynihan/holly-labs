@@ -44,6 +44,7 @@ instructions:
     1. IDENTIFY THE QUESTION TYPE:
        - Price / chart / trend / performance → STOCK_PRICES
        - "Is X in the S&P 500?" / sector / industry → SP500_COMPANIES
+       - Exchange rate / FX / currency conversion → FX_RATES
        - Filing content / "what did the 10-K say" → SEC_FILINGS_SEARCH
        - Earnings call / "what did management say" → TRANSCRIPTS_SEARCH
        - Current news / live events → WEB_SEARCH
@@ -106,6 +107,8 @@ instructions:
     - question: "What happened to Tesla stock today?"
     - question: "Compare Nvidia's revenue growth vs AMD using their latest filings"
     - question: "Plot the stock price of the top 3 semiconductor companies over 6 months"
+    - question: "What is the current EUR/USD exchange rate?"
+    - question: "Plot the EUR/USD exchange rate over the last 6 months"
 
 tools:
   - tool_spec:
@@ -142,6 +145,14 @@ tools:
         When NOT to Use: Stock prices, SEC filings, or company fundamentals.
         IMPORTANT: When the question is about a specific company or executive, ALWAYS filter by PRIMARY_TICKER (e.g. NVDA for NVIDIA/Jensen Huang, AMZN for Amazon, META for Meta).
   - tool_spec:
+      type: cortex_analyst_text_to_sql
+      name: FX_RATES
+      description: |
+        Queries foreign exchange rates for major currency pairs (EUR, GBP, JPY, CHF, CAD, AUD vs USD).
+        Data: Daily exchange rates by base/quote currency and date.
+        When to Use: Exchange rate queries, FX trends, currency comparisons.
+        When NOT to Use: Stock prices (use STOCK_PRICES), company info (use SP500_COMPANIES).
+  - tool_spec:
       type: web_search
       name: WEB_SEARCH
       description: |
@@ -163,6 +174,12 @@ tool_resources:
       type: warehouse
       warehouse: HOLLY_WH
     query_timeout: 120
+  FX_RATES:
+    semantic_view: "HOLLY_DB.STRUCTURED.FX_RATES_SV"
+    execution_environment:
+      type: warehouse
+      warehouse: HOLLY_WH
+    query_timeout: 60
   SP500_COMPANIES:
     semantic_view: "HOLLY_DB.STRUCTURED.SP500_SV"
     execution_environment:

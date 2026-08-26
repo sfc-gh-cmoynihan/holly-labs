@@ -40,6 +40,18 @@ ALTER WAREHOUSE HOLLY_IW SET FALLBACK_WAREHOUSE = HOLLY_WH;
 ALTER WAREHOUSE HOLLY_IW ADD TABLES (HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT);
 
 -- ============================================================================
+-- 4. FX RATES INTERACTIVE TABLE
+-- ============================================================================
+
+CREATE OR REPLACE INTERACTIVE TABLE HOLLY_DB.STRUCTURED.FX_RATES_IT
+    CLUSTER BY (BASE_CURRENCY_ID, QUOTE_CURRENCY_ID, DATE)
+    COMMENT = 'FX rates optimized for sub-second interactive queries'
+AS
+SELECT * FROM HOLLY_DB.STRUCTURED.FX_RATES;
+
+ALTER WAREHOUSE HOLLY_IW ADD TABLES (HOLLY_DB.STRUCTURED.FX_RATES_IT);
+
+-- ============================================================================
 -- 4. UPDATE AGENT TO USE INTERACTIVE TABLE + WAREHOUSE
 -- ============================================================================
 
@@ -93,5 +105,52 @@ CREATE OR REPLACE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV
 SELECT TICKER, DATE, VALUE AS CLOSING_PRICE
 FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT
 WHERE TICKER = 'NVDA' AND VARIABLE_NAME = 'Post-Market Close'
+ORDER BY DATE DESC
+LIMIT 5;
+
+-- ============================================================================
+-- 6. UPDATE FX SEMANTIC VIEW TO USE INTERACTIVE TABLE
+-- ============================================================================
+
+CREATE OR REPLACE SEMANTIC VIEW HOLLY_DB.STRUCTURED.FX_RATES_SV
+  TABLES (
+    HOLLY_DB.STRUCTURED.FX_RATES_IT
+  )
+  FACTS (
+    FX_RATES_IT.VALUE AS VALUE
+      comment='Exchange rate value. E.g., EUR/USD = 1.08 means 1 EUR buys 1.08 USD.'
+  )
+  DIMENSIONS (
+    FX_RATES_IT.BASE_CURRENCY_ID AS BASE_CURRENCY_ID
+      comment='3-letter ISO code of the base currency (the one being priced). E.g. EUR in EUR/USD.',
+    FX_RATES_IT.QUOTE_CURRENCY_ID AS QUOTE_CURRENCY_ID
+      comment='3-letter ISO code of the quote currency. E.g. USD in EUR/USD.',
+    FX_RATES_IT.VARIABLE_NAME AS VARIABLE_NAME
+      comment='Human-readable pair name, e.g. EUR/USD Exchange Rate.',
+    FX_RATES_IT.DATE AS DATE
+      comment='Date of the exchange rate observation.'
+  )
+  COMMENT = 'Foreign exchange rates on Interactive Table. Use BASE_CURRENCY_ID and QUOTE_CURRENCY_ID to filter pairs.'
+  AI_VERIFIED_QUERIES (
+    "What is the current EUR/USD exchange rate?" AS (
+      QUESTION 'What is the current EUR/USD exchange rate?'
+      VERIFIED_AT 1743552000
+      VERIFIED_BY 'ADMIN'
+      ONBOARDING_QUESTION true
+      SQL 'SELECT DATE, BASE_CURRENCY_ID, QUOTE_CURRENCY_ID, VALUE AS EXCHANGE_RATE FROM HOLLY_DB.STRUCTURED.FX_RATES_IT WHERE BASE_CURRENCY_ID = ''EUR'' AND QUOTE_CURRENCY_ID = ''USD'' ORDER BY DATE DESC LIMIT 1'
+    ),
+    "Plot the EUR/USD exchange rate over the last 6 months" AS (
+      QUESTION 'Plot the EUR/USD exchange rate over the last 6 months'
+      VERIFIED_AT 1743552000
+      VERIFIED_BY 'ADMIN'
+      ONBOARDING_QUESTION true
+      SQL 'SELECT DATE, VALUE AS EXCHANGE_RATE FROM HOLLY_DB.STRUCTURED.FX_RATES_IT WHERE BASE_CURRENCY_ID = ''EUR'' AND QUOTE_CURRENCY_ID = ''USD'' AND DATE >= DATEADD(MONTH, -6, CURRENT_DATE()) ORDER BY DATE'
+    )
+  );
+
+-- Test FX query speed
+SELECT DATE, VALUE AS EXCHANGE_RATE
+FROM HOLLY_DB.STRUCTURED.FX_RATES_IT
+WHERE BASE_CURRENCY_ID = 'EUR' AND QUOTE_CURRENCY_ID = 'USD'
 ORDER BY DATE DESC
 LIMIT 5;
