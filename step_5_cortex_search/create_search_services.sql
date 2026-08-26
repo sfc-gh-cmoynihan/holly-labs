@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
 -- Date: 26-Aug-2026
--- Version: 1.5
+-- Version: 1.6
 
 /*
 ================================================================================
@@ -18,8 +18,8 @@
 USE ROLE ACCOUNTADMIN;
 USE WAREHOUSE HOLLY_AD_WH;
 
--- Scale up adaptive warehouse for fast embedding build
-ALTER WAREHOUSE HOLLY_AD_WH SET MAX_QUERY_PERFORMANCE_LEVEL = '4X-Large';
+-- Scale up adaptive warehouse for embedding build
+ALTER WAREHOUSE HOLLY_AD_WH SET MAX_QUERY_PERFORMANCE_LEVEL = 'Large';
 
 -- ============================================================================
 -- 1. SEC FILINGS SEARCH SERVICE (run in Session 1)
