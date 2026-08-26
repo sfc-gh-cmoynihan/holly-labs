@@ -14,8 +14,8 @@ graph TD
     end
 
     subgraph "Cortex Search Services"
-        CS1[EDGAR_FILINGS_SEARCH<br/>Embedding: arctic-embed-m-v2.0<br/>Refresh: 1 day<br/>Last 12 months]
-        CS2[PUBLIC_TRANSCRIPTS_SEARCH<br/>Embedding: arctic-embed-m-v2.0<br/>Refresh: 1 day<br/>Last 12 months]
+        CS1[EDGAR_FILINGS_SEARCH<br/>Embedding: arctic-embed-m-v1.5<br/>Refresh: 1 day<br/>Last 12 months]
+        CS2[PUBLIC_TRANSCRIPTS_SEARCH<br/>Embedding: arctic-embed-m-v1.5<br/>Refresh: 1 day<br/>Last 12 months]
     end
 
     subgraph "Capabilities"
@@ -54,7 +54,7 @@ Run `create_search_services.sql`. The script creates:
 The script is designed to build in ~2 minutes using three techniques:
 
 1. **Parallel execution** — run both CREATE statements in separate Snowsight worksheets simultaneously
-2. **Smaller embedding model** — `arctic-embed-m-v2.0` (768-dim) is faster than `l-v2.0` with minimal quality impact for this use case
+2. **Smaller embedding model** — `arctic-embed-m-v1.5` (768-dim, default) is faster than `l-v2.0` with minimal quality impact for this use case
 3. **12-month data window** — limits source rows to the last year (33K filings + 16K transcripts vs 175K total)
 
 ### Important Notes
