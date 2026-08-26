@@ -111,6 +111,7 @@ instructions:
     - question: "Plot the EUR/USD exchange rate over the last 6 months"
     - question: "Chart the USD to EUR exchange rate over the last 12 months"
     - question: "Chart the USD to GBP exchange rate over the last 12 months"
+    - question: "What is the USD to GBP exchange rate over the last 3 months"
 
 tools:
   - tool_spec:
