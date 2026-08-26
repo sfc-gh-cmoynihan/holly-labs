@@ -1,16 +1,17 @@
 -- Author: Colm Moynihan
 -- Date: 26-Aug-2026
--- Version: 1.4
+-- Version: 1.5
 
 /*
 ================================================================================
   Step 5: Create Cortex Search Services
   
   Build semantic search over SEC filings and earnings transcripts.
+  Limits source data to last 12 months for fast initial builds (~2 min).
   Temporarily scales HOLLY_AD_WH to 4X-Large for fast embedding builds.
   
   PERFORMANCE NOTE: Run both CREATE statements in PARALLEL (two separate
-  worksheets/sessions) to halve build time (~2 min vs ~10 min sequential).
+  worksheets/sessions) to halve build time.
 ================================================================================
 */
 
@@ -35,6 +36,7 @@ AS (
         COMPANY_NAME, ANNOUNCEMENT_TYPE, FILED_DATE, FISCAL_PERIOD, FISCAL_YEAR, 
         ITEM_NUMBER, ITEM_TITLE, ANNOUNCEMENT_TEXT
     FROM HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS
+    WHERE FILED_DATE >= DATEADD(YEAR, -1, CURRENT_DATE())
 );
 
 -- ============================================================================
@@ -54,6 +56,7 @@ AS (
         LEFT(TRANSCRIPT:text::VARCHAR, 8000) AS TRANSCRIPT_TEXT
     FROM HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS
     WHERE TRANSCRIPT:text IS NOT NULL
+      AND EVENT_TIMESTAMP >= DATEADD(YEAR, -1, CURRENT_DATE())
 );
 
 -- ============================================================================
