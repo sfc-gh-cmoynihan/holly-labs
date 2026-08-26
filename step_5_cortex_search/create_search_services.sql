@@ -1,13 +1,16 @@
 -- Author: Colm Moynihan
--- Date: 25-Aug-2026
--- Version: 1.3
+-- Date: 26-Aug-2026
+-- Version: 1.4
 
 /*
 ================================================================================
-  Step 4: Create Cortex Search Services
+  Step 5: Create Cortex Search Services
   
   Build semantic search over SEC filings and earnings transcripts.
   Temporarily scales HOLLY_AD_WH to 4X-Large for fast embedding builds.
+  
+  PERFORMANCE NOTE: Run both CREATE statements in PARALLEL (two separate
+  worksheets/sessions) to halve build time (~2 min vs ~10 min sequential).
 ================================================================================
 */
 
@@ -18,7 +21,7 @@ USE WAREHOUSE HOLLY_AD_WH;
 ALTER WAREHOUSE HOLLY_AD_WH SET MAX_QUERY_PERFORMANCE_LEVEL = '4X-Large';
 
 -- ============================================================================
--- 1. SEC FILINGS SEARCH SERVICE
+-- 1. SEC FILINGS SEARCH SERVICE (run in Session 1)
 -- ============================================================================
 
 CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_SEARCH
@@ -26,7 +29,7 @@ CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_S
     ATTRIBUTES COMPANY_NAME, ANNOUNCEMENT_TYPE, FILED_DATE, FISCAL_PERIOD, FISCAL_YEAR, ITEM_NUMBER, ITEM_TITLE
     WAREHOUSE = HOLLY_AD_WH
     TARGET_LAG = '1 day'
-    EMBEDDING_MODEL = 'snowflake-arctic-embed-l-v2.0'
+    EMBEDDING_MODEL = 'snowflake-arctic-embed-m-v2.0'
 AS (
     SELECT 
         COMPANY_NAME, ANNOUNCEMENT_TYPE, FILED_DATE, FISCAL_PERIOD, FISCAL_YEAR, 
@@ -35,7 +38,7 @@ AS (
 );
 
 -- ============================================================================
--- 2. EARNINGS TRANSCRIPTS SEARCH SERVICE
+-- 2. EARNINGS TRANSCRIPTS SEARCH SERVICE (run in Session 2, parallel)
 -- ============================================================================
 
 CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS_SEARCH
@@ -43,22 +46,23 @@ CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS
     ATTRIBUTES COMPANY_NAME, PRIMARY_TICKER, EVENT_TYPE, FISCAL_PERIOD, FISCAL_YEAR
     WAREHOUSE = HOLLY_AD_WH
     TARGET_LAG = '1 day'
-    EMBEDDING_MODEL = 'snowflake-arctic-embed-l-v2.0'
+    EMBEDDING_MODEL = 'snowflake-arctic-embed-m-v2.0'
 AS (
     SELECT 
         COMPANY_NAME, PRIMARY_TICKER, FISCAL_PERIOD, FISCAL_YEAR, 
         EVENT_TYPE, EVENT_TIMESTAMP,
-        TRANSCRIPT:text::VARCHAR AS TRANSCRIPT_TEXT
+        LEFT(TRANSCRIPT:text::VARCHAR, 8000) AS TRANSCRIPT_TEXT
     FROM HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS
     WHERE TRANSCRIPT:text IS NOT NULL
 );
 
 -- ============================================================================
 -- VERIFY (services will show status = BUILDING initially)
+-- Wait for BOTH services to reach ACTIVE before scaling down.
 -- ============================================================================
-
--- Scale back down for ongoing refreshes
-ALTER WAREHOUSE HOLLY_AD_WH SET MAX_QUERY_PERFORMANCE_LEVEL = 'Medium';
 
 SHOW CORTEX SEARCH SERVICES IN SCHEMA HOLLY_DB.SEMI_STRUCTURED;
 SHOW CORTEX SEARCH SERVICES IN SCHEMA HOLLY_DB.UNSTRUCTURED;
+
+-- Scale back down AFTER both services are ACTIVE
+ALTER WAREHOUSE HOLLY_AD_WH SET MAX_QUERY_PERFORMANCE_LEVEL = 'Medium';
