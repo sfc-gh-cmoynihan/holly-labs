@@ -1,5 +1,7 @@
 # Step 5: Cortex Search
 
+> **Trial Account Notice:** This step requires the `EMBED_TEXT` AI function which is **not available on Snowflake trial accounts**. If you are using a trial account, **skip this step entirely** and remove the `SEC_FILINGS_SEARCH` and `TRANSCRIPTS_SEARCH` tools (and their `tool_resources` entries) from the Holly agent in Step 6. The agent will still work with stock prices, S&P 500 lookups, FX rates, web search, and charts.
+
 **Time: ~2 minutes** (run both services in parallel)
 
 ## What You'll Build
