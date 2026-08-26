@@ -11,11 +11,13 @@ graph LR
     subgraph "Tables"
         T1[STOCK_PRICE_TIMESERIES]
         T2[SP500_COMPANIES]
+        T3[FX_RATES]
     end
 
     subgraph "Semantic Views"
         SV1[STOCK_PRICE_TIMESERIES_SV<br/>Facts: VALUE<br/>Dims: TICKER, DATE, VARIABLE_NAME]
         SV2[SP500_SV<br/>Facts: none<br/>Dims: SYMBOL, SECTOR, INDUSTRY]
+        SV3[FX_RATES_SV<br/>Facts: VALUE<br/>Dims: BASE_CURRENCY_ID, QUOTE_CURRENCY_ID, DATE]
     end
 
     subgraph "Cortex Analyst"
@@ -24,11 +26,14 @@ graph LR
 
     T1 --> SV1
     T2 --> SV2
+    T3 --> SV3
     SV1 --> CA
     SV2 --> CA
+    SV3 --> CA
 
     style SV1 fill:#29B5E8
     style SV2 fill:#29B5E8
+    style SV3 fill:#29B5E8
 ```
 
 ## What is a Semantic View?

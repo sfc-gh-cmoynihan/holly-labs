@@ -12,12 +12,14 @@ graph TD
         M1[STOCK_PRICE_TIMESERIES]
         M2[SEC_CORPORATE_REPORT_*]
         M3[COMPANY_EVENT_TRANSCRIPT_*]
+        M4[FX_RATES_TIMESERIES]
     end
 
     subgraph "HOLLY_DB"
         subgraph "STRUCTURED schema"
             S1[SP500_COMPANIES]
             S2[STOCK_PRICE_TIMESERIES]
+            S3[FX_RATES]
         end
         subgraph "SEMI_STRUCTURED schema"
             SS1[EDGAR_FILINGS]
@@ -30,9 +32,11 @@ graph TD
     M1 -->|CTAS| S2
     M2 -->|CTAS + JOIN| SS1
     M3 -->|CTAS + JOIN| U1
+    M4 -->|CTAS| S3
 
     style S1 fill:#29B5E8
     style S2 fill:#29B5E8
+    style S3 fill:#29B5E8
     style SS1 fill:#F7A501
     style U1 fill:#78C257
 ```

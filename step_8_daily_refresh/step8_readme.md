@@ -20,11 +20,13 @@ graph LR
         M1[Stock Prices]
         M2[SEC Filings]
         M3[Transcripts]
+        M4[FX Rates]
     end
 
     subgraph "Holly DB"
         T1[EDGAR_FILINGS]
         T2[PUBLIC_TRANSCRIPTS]
+        T3[FX_RATES]
     end
 
     subgraph "Auto-Refresh"
@@ -34,8 +36,10 @@ graph LR
     CRON --> SP
     SP -->|MERGE| T1
     SP -->|MERGE| T2
+    SP -->|MERGE| T3
     M2 --> SP
     M3 --> SP
+    M4 --> SP
     T1 -->|Change tracking| CS
     T2 -->|Change tracking| CS
 

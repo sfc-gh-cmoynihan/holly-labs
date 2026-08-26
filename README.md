@@ -49,7 +49,7 @@ The lab consists of 9 steps that **must be executed in order** (each step depend
 
 ```
 Snowflake Marketplace          Cortex Search Services
-(S&P 500 data)                 (SEC filings + transcripts)
+(S&P 500 + FX data)            (SEC filings + transcripts)
        │                              │
        ▼                              ▼
 ┌─────────────────┐           ┌──────────────────┐
@@ -62,7 +62,8 @@ Snowflake Marketplace          Cortex Search Services
 ┌─────────────────────────────────────────────────┐
 │              Holly Agent (CoWork)                │
 │  Tools: STOCK_PRICES, SP500_COMPANIES,          │
-│         SEC_FILINGS_SEARCH, TRANSCRIPTS_SEARCH, │
-│         WEB_SEARCH, DATA_TO_CHART               │
+│         FX_RATES, SEC_FILINGS_SEARCH,           │
+│         TRANSCRIPTS_SEARCH, WEB_SEARCH,         │
+│         DATA_TO_CHART                           │
 └─────────────────────────────────────────────────┘
 ```
