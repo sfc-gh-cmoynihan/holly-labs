@@ -14,8 +14,8 @@ graph TD
     end
 
     subgraph "Cortex Search Services"
-        CS1[EDGAR_FILINGS_SEARCH<br/>Embedding: arctic-embed-m-v1.5<br/>Refresh: 1 day<br/>Last 12 months]
-        CS2[PUBLIC_TRANSCRIPTS_SEARCH<br/>Embedding: arctic-embed-m-v1.5<br/>Refresh: 1 day<br/>Last 12 months]
+        CS1[EDGAR_FILINGS_SEARCH<br/>Embedding: arctic-embed-l-v2.0<br/>Refresh: 1 day<br/>Last 12 months]
+        CS2[PUBLIC_TRANSCRIPTS_SEARCH<br/>Embedding: arctic-embed-l-v2.0<br/>Refresh: 1 day<br/>Last 12 months]
     end
 
     subgraph "Capabilities"
@@ -54,8 +54,20 @@ Run `create_search_services.sql`. The script creates:
 The script is designed to build in ~2 minutes using three techniques:
 
 1. **Parallel execution** — run both CREATE statements in separate Snowsight worksheets simultaneously
-2. **Smaller embedding model** — `arctic-embed-m-v1.5` (768-dim, default) is faster than `l-v2.0` with minimal quality impact for this use case
+2. **Arctic Embed L v2.0** — Snowflake's latest multilingual embedding model (1024-dim, 568M parameters). Higher retrieval quality than the default `m-v1.5` with support for non-English financial terms and company names
 3. **12-month data window** — limits source rows to the last year (33K filings + 16K transcripts vs 175K total)
+
+### Why Arctic Embed L v2.0?
+
+| Feature | arctic-embed-m-v1.5 (default) | arctic-embed-l-v2.0 (selected) |
+|---------|-------------------------------|--------------------------------|
+| Dimensions | 768 | 1024 |
+| Parameters | 110M | 568M |
+| Language | English only | Multilingual |
+| Context window | 512 tokens | 512 tokens |
+| Quality | Good | Higher retrieval accuracy |
+
+The `l-v2.0` model produces richer embeddings that better capture nuanced financial language (e.g., distinguishing "revenue guidance" from "revenue recognition"), resulting in more precise search results for the Holly agent. The tradeoff is slightly longer initial index build times, which is offset by the 12-month data window.
 
 ### Important Notes
 
