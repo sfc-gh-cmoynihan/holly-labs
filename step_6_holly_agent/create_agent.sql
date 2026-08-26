@@ -88,30 +88,20 @@ instructions:
 
   sample_questions:
     - question: "Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months"
-    - question: "Show a bar chart of the top 5 best performing stocks over the last 3 months"
-    - question: "Show a heatmap of monthly returns for MSFT, AMZN, META, NVDA over 12 months"
     - question: "What is the latest share price of NVIDIA?"
-    - question: "What is the share price of Amazon?"
     - question: "Compare the stock price of Microsoft and Google over the last 6 months"
     - question: "What are the top 5 best performing stocks over the last 3 months?"
     - question: "Which companies in the S&P 500 are in the semiconductor industry?"
-    - question: "Which oil and gas companies are in the S&P 500?"
     - question: "Is Tesla in the S&P 500? When was it added?"
     - question: "What did NVIDIA's latest 10-K say about revenue growth?"
-    - question: "What did Apple disclose about AI in their most recent filing?"
     - question: "Compare the risk factors in Microsoft and Google's latest 10-K filings"
     - question: "What did Jensen Huang say about data center demand?"
     - question: "What guidance did Amazon give in their latest earnings call?"
-    - question: "What did Meta's CFO say about capital expenditure?"
     - question: "What is the latest news about NVIDIA?"
-    - question: "What happened to Tesla stock today?"
-    - question: "Compare Nvidia's revenue growth vs AMD using their latest filings"
-    - question: "Plot the stock price of the top 3 semiconductor companies over 6 months"
     - question: "What is the current EUR/USD exchange rate?"
-    - question: "Plot the EUR/USD exchange rate over the last 6 months"
     - question: "Chart the USD to EUR exchange rate over the last 12 months"
     - question: "Chart the USD to GBP exchange rate over the last 12 months"
-    - question: "What is the USD to GBP exchange rate over the last 3 months"
+    - question: "Plot the stock price of the top 3 semiconductor companies over 6 months"
 
 tools:
   - tool_spec:
