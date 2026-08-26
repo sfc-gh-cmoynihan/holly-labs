@@ -4,7 +4,7 @@
 
 ## What You'll Build
 
-Create Holly — a financial research agent that orchestrates semantic views, Cortex Search, web search, and charting into a single conversational interface with 20 sample questions.
+Create Holly — a financial research agent that orchestrates semantic views, Cortex Search, web search, and charting into a single conversational interface with 24 sample questions.
 
 ```mermaid
 graph TD
@@ -19,10 +19,11 @@ graph TD
     subgraph "Tools"
         T1[STOCK_PRICES<br/>Cortex Analyst]
         T2[SP500_COMPANIES<br/>Cortex Analyst]
-        T3[SEC_FILINGS_SEARCH<br/>Cortex Search]
-        T4[TRANSCRIPTS_SEARCH<br/>Cortex Search]
-        T5[WEB_SEARCH<br/>Live web]
-        T6[DATA_TO_CHART<br/>Visualization]
+        T3[FX_RATES<br/>Cortex Analyst]
+        T4[SEC_FILINGS_SEARCH<br/>Cortex Search]
+        T5[TRANSCRIPTS_SEARCH<br/>Cortex Search]
+        T6[WEB_SEARCH<br/>Live web]
+        T7[DATA_TO_CHART<br/>Visualization]
     end
 
     U --> O
@@ -32,6 +33,7 @@ graph TD
     O --> T4
     O --> T5
     O --> T6
+    O --> T7
 
     style O fill:#29B5E8
 ```
@@ -48,11 +50,11 @@ A Cortex Agent is an AI orchestrator that:
 
 Run `create_agent.sql`. The script creates:
 
-1. The Holly agent with 6 tools (2 analyst, 2 search, web search, charting)
+1. The Holly agent with 7 tools (3 analyst, 2 search, web search, charting)
 2. Chart customization with monotone interpolation for smooth stock charts
-3. 20 sample questions spanning all tool types
+3. 24 sample questions spanning all tool types
 
-### 20 Sample Questions
+### 24 Sample Questions
 
 | # | Question | Tool Used |
 |---|----------|-----------|
@@ -76,6 +78,10 @@ Run `create_agent.sql`. The script creates:
 | 18 | What happened to Tesla stock today? | WEB_SEARCH |
 | 19 | Compare Nvidia's revenue growth vs AMD using their latest filings | SEC_FILINGS_SEARCH (multi) |
 | 20 | Plot the stock price of the top 3 semiconductor companies over 6 months | SP500 + STOCK_PRICES + CHART |
+| 21 | What is the current EUR/USD exchange rate? | FX_RATES |
+| 22 | Plot the EUR/USD exchange rate over the last 6 months | FX_RATES + CHART |
+| 23 | What is the USD to EUR exchange rate? | FX_RATES |
+| 24 | What is the USD to GBP exchange rate? | FX_RATES |
 
 ## Verify It Worked
 

@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
 -- Date: 26-Aug-2026
--- Version: 2.3
+-- Version: 2.4
 
 /*
 ================================================================================
@@ -109,6 +109,8 @@ instructions:
     - question: "Plot the stock price of the top 3 semiconductor companies over 6 months"
     - question: "What is the current EUR/USD exchange rate?"
     - question: "Plot the EUR/USD exchange rate over the last 6 months"
+    - question: "What is the USD to EUR exchange rate?"
+    - question: "What is the USD to GBP exchange rate?"
 
 tools:
   - tool_spec:
