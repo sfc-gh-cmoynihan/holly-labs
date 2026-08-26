@@ -1,6 +1,6 @@
 # Step 5: Cortex Search
 
-**Time: 10 minutes**
+**Time: ~2 minutes** (run both services in parallel)
 
 ## What You'll Build
 
@@ -14,8 +14,8 @@ graph TD
     end
 
     subgraph "Cortex Search Services"
-        CS1[EDGAR_FILINGS_SEARCH<br/>Embedding: arctic-embed-l-v2.0<br/>Refresh: 1 day]
-        CS2[PUBLIC_TRANSCRIPTS_SEARCH<br/>Embedding: arctic-embed-l-v2.0<br/>Refresh: 1 day]
+        CS1[EDGAR_FILINGS_SEARCH<br/>Embedding: arctic-embed-m-v2.0<br/>Refresh: 1 day<br/>Last 12 months]
+        CS2[PUBLIC_TRANSCRIPTS_SEARCH<br/>Embedding: arctic-embed-m-v2.0<br/>Refresh: 1 day<br/>Last 12 months]
     end
 
     subgraph "Capabilities"
@@ -49,11 +49,19 @@ Run `create_search_services.sql`. The script creates:
 1. **EDGAR_FILINGS_SEARCH** — search over SEC filing content by company, filing type, date
 2. **PUBLIC_TRANSCRIPTS_SEARCH** — search over earnings call transcripts by company, ticker, event type
 
+### Performance Optimizations
+
+The script is designed to build in ~2 minutes using three techniques:
+
+1. **Parallel execution** — run both CREATE statements in separate Snowsight worksheets simultaneously
+2. **Smaller embedding model** — `arctic-embed-m-v2.0` (768-dim) is faster than `l-v2.0` with minimal quality impact for this use case
+3. **12-month data window** — limits source rows to the last year (33K filings + 16K transcripts vs 175K total)
+
 ### Important Notes
 
-- The embedding model `snowflake-arctic-embed-l-v2.0` is Snowflake's best-in-class retrieval model
 - `TARGET_LAG = '1 day'` means the index refreshes automatically within 24 hours of source data changes
-- Change tracking (enabled in Step 2) provides the delta for incremental refresh — only new/changed rows are re-embedded
+- Change tracking (enabled in Step 3) provides the delta for incremental refresh — only new/changed rows are re-embedded
+- Transcript text is truncated to 8000 chars since Cortex Search chunks internally
 
 ## Verify It Worked
 
@@ -62,7 +70,7 @@ Run `create_search_services.sql`. The script creates:
 SHOW CORTEX SEARCH SERVICES IN SCHEMA HOLLY_DB.SEMI_STRUCTURED;
 SHOW CORTEX SEARCH SERVICES IN SCHEMA HOLLY_DB.UNSTRUCTURED;
 
--- Test a search (after index builds, ~5 min)
+-- Test a search (after index builds, ~2 min)
 SELECT SNOWFLAKE.CORTEX.SEARCH_PREVIEW(
     'HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_SEARCH',
     '{"query": "NVIDIA revenue growth", "columns": ["COMPANY_NAME", "ANNOUNCEMENT_TYPE", "FILED_DATE"], "limit": 3}'
