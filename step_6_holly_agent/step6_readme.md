@@ -80,8 +80,8 @@ Run `create_agent.sql`. The script creates:
 | 20 | Plot the stock price of the top 3 semiconductor companies over 6 months | SP500 + STOCK_PRICES + CHART |
 | 21 | What is the current EUR/USD exchange rate? | FX_RATES |
 | 22 | Plot the EUR/USD exchange rate over the last 6 months | FX_RATES + CHART |
-| 23 | What is the USD to EUR exchange rate? | FX_RATES |
-| 24 | What is the USD to GBP exchange rate? | FX_RATES |
+| 23 | Chart the USD to EUR exchange rate over the last 12 months | FX_RATES + CHART |
+| 24 | Chart the USD to GBP exchange rate over the last 12 months | FX_RATES + CHART |
 
 ## Verify It Worked
 
