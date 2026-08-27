@@ -1,11 +1,12 @@
 -- Author: Colm Moynihan
 -- Date: 26-Aug-2026
--- Version: 3.3
+-- Version: 3.4
 
 /*
 ================================================================================
   Step 5a: SEC Filings Search Service
   
+  Scales HOLLY_WH to X-Large for fast embedding builds, then back to Medium.
   Run this in Session 1. Run create_search_services2.sql in Session 2
   simultaneously for parallel builds (~2 min total).
 ================================================================================
@@ -13,6 +14,9 @@
 
 USE ROLE ACCOUNTADMIN;
 USE WAREHOUSE HOLLY_WH;
+
+-- Scale up for embedding builds
+ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = 'X-LARGE';
 
 -- ============================================================================
 -- SEC FILINGS SEARCH SERVICE
@@ -37,4 +41,7 @@ AS (
 -- ============================================================================
 
 SHOW CORTEX SEARCH SERVICES IN SCHEMA HOLLY_DB.SEMI_STRUCTURED;
+
+-- Scale back down
+ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = 'MEDIUM';
 

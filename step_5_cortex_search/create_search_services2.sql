@@ -1,11 +1,12 @@
 -- Author: Colm Moynihan
 -- Date: 26-Aug-2026
--- Version: 3.3
+-- Version: 3.4
 
 /*
 ================================================================================
   Step 5b: Earnings Transcripts Search Service
   
+  Scales HOLLY_WH to X-Large for fast embedding builds, then back to Medium.
   Run this in Session 2 (parallel with create_search_services1.sql).
   Uses HOLLY_WH — both services can build concurrently on the same warehouse.
 ================================================================================
@@ -13,6 +14,9 @@
 
 USE ROLE ACCOUNTADMIN;
 USE WAREHOUSE HOLLY_WH;
+
+-- Scale up for embedding builds
+ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = 'X-LARGE';
 
 -- ============================================================================
 -- EARNINGS TRANSCRIPTS SEARCH SERVICE
@@ -39,4 +43,7 @@ AS (
 -- ============================================================================
 
 SHOW CORTEX SEARCH SERVICES IN SCHEMA HOLLY_DB.UNSTRUCTURED;
+
+-- Scale back down
+ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = 'MEDIUM';
 
