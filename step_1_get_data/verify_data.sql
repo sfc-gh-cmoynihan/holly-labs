@@ -4,7 +4,7 @@
 
 /*
 ================================================================================
-  Step 1: Explore Snowflake Public Data
+  Step 1: Verify Marketplace Data
   
   Run these queries to verify your marketplace subscription is working
   and explore the available financial datasets.
@@ -12,9 +12,7 @@
 */
 
 USE ROLE ACCOUNTADMIN;
-CREATE WAREHOUSE IF NOT EXISTS HOLLY_AD_WH
-    WAREHOUSE_TYPE = 'ADAPTIVE';
-USE WAREHOUSE HOLLY_AD_WH;
+USE WAREHOUSE HOLLY_WH;
 
 -- See what schemas are available
 SHOW SCHEMAS IN DATABASE SNOWFLAKE_PUBLIC_DATA_PAID;

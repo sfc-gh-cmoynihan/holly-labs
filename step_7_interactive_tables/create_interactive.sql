@@ -11,7 +11,7 @@
 */
 
 USE ROLE ACCOUNTADMIN;
-USE WAREHOUSE HOLLY_AD_WH;
+USE WAREHOUSE HOLLY_WH;
 
 -- ============================================================================
 -- 1. CREATE INTERACTIVE TABLE (from existing stock price data)
