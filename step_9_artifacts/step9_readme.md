@@ -1,4 +1,4 @@
-# Step 9: Artifacts
+# Step 9: Artifacts & Automations
 
 **Time: 10 minutes**
 
@@ -115,6 +115,60 @@ Try saving these as artifacts for your daily workflow:
 | No context for follow-up analysis | Ask follow-up questions directly on the artifact |
 
 **Key advantage:** Artifacts turn Holly from a conversational tool into a persistent analytics layer. Every chart or table Holly generates can become a live, shared, permission-aware asset — without building a dashboard or configuring a BI tool. The artifact is just a saved query that re-executes with the viewer's credentials.
+
+## Automations
+
+Automations let you schedule recurring Cortex Code runs as **Snowflake AGENT TASKs**. They run unattended on a cron schedule — no warehouse needed, no human in the loop.
+
+### Prerequisites
+
+1. Enable AGENT TASK on your account (one-time):
+   ```sql
+   ALTER ACCOUNT SET ENABLE_CORTEX_AGENT_TASK = TRUE;
+   ```
+2. Have Cortex Code Desktop installed with the `cortex` CLI available
+
+### Example Automations
+
+See `create_automations.sql` for three ready-to-use automation scripts:
+
+| Automation | Schedule | What it does |
+|-----------|----------|--------------|
+| **Daily Market Summary** | Weekdays 8am | Top/bottom 5 movers in S&P 500 |
+| **Weekly Performance Report** | Monday 9am | Top 10 performers chart + FX snapshot |
+| **FX Rate Alert** | Weekdays 7am | Flag if EUR/USD moves > 1% |
+
+### How to Create
+
+Run in the Cortex Code terminal (not a SQL worksheet):
+
+```bash
+cortex automation create \
+  --name "daily-market-summary" \
+  --schedule "weekdays at 8am" \
+  --timezone "Europe/Dublin" \
+  --prompt "Your prompt here..."
+```
+
+### How to Manage
+
+```bash
+cortex automation list                    # See all automations
+cortex automation doctor <name>           # Check run history & errors
+cortex automation suspend <name>          # Pause
+cortex automation resume <name>           # Resume
+cortex automation drop <name>             # Delete
+cortex conversations transcript <id>     # See what a fire actually did
+```
+
+### Key Points
+
+- **No warehouse needed** — AGENT TASKs run in a Snowflake-managed sandbox
+- **Runs as you** — uses your permissions, visible in your conversation history
+- **Read-only by default** — can't accidentally write/delete data
+- **No local files or MCP** — only Cortex Code built-in tools and Snowflake-managed MCP servers
+
+---
 
 ## You're Done!
 
