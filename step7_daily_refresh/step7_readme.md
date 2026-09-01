@@ -32,24 +32,23 @@ graph LR
 ## How It Works
 
 1. **CRON schedule** triggers the task at 6 AM UTC every day
-2. **MERGE statement** compares marketplace data against your tables — only inserts new rows
-3. **Change tracking** on target tables automatically notifies Cortex Search services
-4. **Cortex Search** incrementally re-embeds only new/changed rows (no full reindex)
+2. **MERGE statement** compares marketplace FX data against your tables — only inserts new rows
+3. **Idempotent** — safe to re-run; duplicates are prevented by matching on natural keys
 
-The result: new SEC filings and earnings transcripts become searchable within ~24 hours of being published, with zero manual work.
+The result: FX rates stay current with zero manual work.
 
 ## Instructions
 
 Run `create_task.sql`. The script:
 
-1. Creates a task with MERGE logic for EDGAR filings and transcripts
+1. Creates a task with MERGE logic for FX rates
 2. Schedules it daily at 6:00 AM UTC
 3. Resumes the task (tasks are suspended by default)
 
 ### Key Design Decisions
 
 - **MERGE (not INSERT)** — idempotent; safe to re-run without duplicates
-- **Match on natural keys** — company + date + item for filings, company + timestamp for transcripts
+- **Match on natural keys** — base currency + quote currency + date
 - **No stock price refresh needed** — Interactive Tables refresh automatically from the marketplace listing
 - **Task uses HOLLY_WH** — standard warehouse for batch processing (Interactive Warehouse is for queries)
 
@@ -74,11 +73,11 @@ ORDER BY SCHEDULED_TIME DESC;
 |---------------------|-----------------|
 | Airflow/Dagster DAG with operator code | Single SQL task — no orchestration framework |
 | Custom CDC pipeline for incremental loads | MERGE + change tracking — built-in CDC |
-| Manual reindexing of vector stores | Cortex Search detects changes automatically |
+| Manual reindexing of derived tables | Interactive Tables refresh automatically |
 | Separate compute for ETL vs serving | Task uses standard WH; queries use Interactive WH |
 | Monitoring via external observability tools | Built-in task history and alerting |
 
-**Key advantage:** The entire data refresh pipeline — from marketplace ingestion through to searchable AI-ready content — is a single SQL task with a MERGE statement. No external orchestration, no custom code, no reindexing scripts. Change tracking bridges the gap between the task (which inserts rows) and Cortex Search (which needs to know what changed).
+**Key advantage:** The entire data refresh pipeline — from marketplace ingestion through to up-to-date tables — is a single SQL task with a MERGE statement. No external orchestration, no custom code, no reindexing scripts.
 
 ---
 
@@ -122,6 +121,6 @@ SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('AAPL'));
 
 ## Next Step
 
-[Step 8: Artifacts →](../step_9_artifacts/)
+[Step 8: Artifacts →](../step8_artifacts/)
 
 [← Back to README](../README.md)

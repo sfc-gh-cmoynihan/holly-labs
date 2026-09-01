@@ -28,14 +28,14 @@ The lab consists of 8 steps that **must be executed in order** (each step depend
 
 | Step | Readme | .sql |
 |------|--------|------|
-| 1 — Install S&P 500 market data from the Snowflake Marketplace | [step1.md](step_1_get_data/step1.md) | [get_data.sql](step_1_get_data/get_data.sql) |
-| 2 — Connect this repo to a Snowflake Git Workspace | [step2.md](step_2_git_integration/step2.md) | — |
-| 3 — Build structured tables from raw Marketplace data | [step3.md](step_3_data_engineering/step3.md) | [data_engineering.sql](step_3_data_engineering/data_engineering.sql) |
-| 4 — Create Semantic Views with verified queries for Cortex Analyst | [step4.md](step_4_semantic_views/step4.md) | [create_semantic_views.sql](step_4_semantic_views/create_semantic_views.sql) |
-| 5 — Deploy the Holly agent with 5 tools and 15 sample questions | [step6.md](step_6_holly_agent/step6.md) | [create_agent.sql](step_6_holly_agent/create_agent.sql) |
-| 6 — Interactive Tables & Warehouses for sub-second queries | [step7.md](step_7_interactive_tables/step7.md) | [create_interactive.sql](step_7_interactive_tables/create_interactive.sql) |
-| 7 — Daily Refresh: Create a task to refresh the data | [step8.md](step_8_daily_refresh/step8.md) | [create_task.sql](step_8_daily_refresh/create_task.sql) |
-| 8 — How to create artifacts and schedule automations | [step9.md](step_9_artifacts/step9.md) | — |
+| 1 — Install S&P 500 market data from the Snowflake Marketplace | [step1_readme.md](step1_get_data/step1_readme.md) | [verify_data.sql](step1_get_data/verify_data.sql) |
+| 2 — Connect this repo to a Snowflake Git Workspace | [step2_readme.md](step2_git_integration/step2_readme.md) | — |
+| 3 — Build structured tables from raw Marketplace data | [step3_readme.md](step3_data_engineering/step3_readme.md) | [data_engineering.sql](step3_data_engineering/data_engineering.sql) |
+| 4 — Create Semantic Views with verified queries for Cortex Analyst | [step4_readme.md](step4_semantic_views/step4_readme.md) | [create_semantic_views.sql](step4_semantic_views/create_semantic_views.sql) |
+| 5 — Deploy the Holly agent with 5 tools and 15 sample questions | [step5_readme.md](step5_holly_agent/step5_readme.md) | [create_agent.sql](step5_holly_agent/create_agent.sql) |
+| 6 — Interactive Tables & Warehouses for sub-second queries | [step6_readme.md](step6_interactive_tables/step6_readme.md) | [create_interactive.sql](step6_interactive_tables/create_interactive.sql) |
+| 7 — Daily Refresh: Create a task to refresh the data | [step7_readme.md](step7_daily_refresh/step7_readme.md) | [create_task.sql](step7_daily_refresh/create_task.sql) |
+| 8 — How to create artifacts and schedule automations | [step8_readme.md](step8_artifacts/step8_readme.md) | — |
 
 ## How to Run
 

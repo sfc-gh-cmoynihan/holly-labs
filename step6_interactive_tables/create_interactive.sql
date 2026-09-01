@@ -4,7 +4,7 @@
 
 /*
 ================================================================================
-  Step 5: Create Interactive Tables and Interactive Warehouse
+  Step 6: Create Interactive Tables and Interactive Warehouse
   
   Sub-second query response for stock price data in Holly.
 ================================================================================
@@ -52,7 +52,7 @@ SELECT * FROM HOLLY_DB.STRUCTURED.FX_RATES;
 ALTER WAREHOUSE HOLLY_IW ADD TABLES (HOLLY_DB.STRUCTURED.FX_RATES_IT);
 
 -- ============================================================================
--- 4. UPDATE AGENT TO USE INTERACTIVE TABLE + WAREHOUSE
+-- 5. UPDATE AGENT TO USE INTERACTIVE TABLE + WAREHOUSE
 -- ============================================================================
 
 -- Update the semantic view to point to the Interactive Table
@@ -94,6 +94,27 @@ CREATE OR REPLACE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV
       VERIFIED_BY 'ADMIN'
       ONBOARDING_QUESTION true
       SQL 'SELECT TICKER, DATE, VALUE AS SHARE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT WHERE TICKER = ''NVDA'' AND VARIABLE_NAME = ''Post-Market Close'' ORDER BY DATE DESC LIMIT 1'
+    ),
+    "Compare the stock price of Microsoft and Google over the last 6 months" AS (
+      QUESTION 'Compare the stock price of Microsoft and Google over the last 6 months'
+      VERIFIED_AT 1743552000
+      VERIFIED_BY 'ADMIN'
+      ONBOARDING_QUESTION true
+      SQL 'SELECT DATE, TICKER, VALUE AS SHARE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT WHERE TICKER IN (''MSFT'', ''GOOGL'') AND VARIABLE_NAME = ''Post-Market Close'' AND DATE >= DATEADD(MONTH, -6, CURRENT_DATE()) ORDER BY DATE, TICKER'
+    ),
+    "What is the closing price of NVDA for the last 30 days?" AS (
+      QUESTION 'What is the closing price of NVDA for the last 30 days?'
+      VERIFIED_AT 1743552000
+      VERIFIED_BY 'ADMIN'
+      ONBOARDING_QUESTION false
+      SQL 'SELECT DATE, TICKER, VALUE AS CLOSING_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT WHERE TICKER = ''NVDA'' AND VARIABLE_NAME = ''Post-Market Close'' AND DATE >= DATEADD(DAY, -30, CURRENT_DATE()) ORDER BY DATE'
+    ),
+    "What are the top 5 best performing S&P 500 stocks over the last 3 months?" AS (
+      QUESTION 'What are the top 5 best performing S&P 500 stocks over the last 3 months?'
+      VERIFIED_AT 1743552000
+      VERIFIED_BY 'ADMIN'
+      ONBOARDING_QUESTION true
+      SQL 'WITH latest AS (SELECT TICKER, VALUE AS LATEST_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT WHERE VARIABLE_NAME = ''Post-Market Close'' AND DATE = (SELECT MAX(DATE) FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT)), baseline AS (SELECT TICKER, VALUE AS BASE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT WHERE VARIABLE_NAME = ''Post-Market Close'' AND DATE = (SELECT MIN(DATE) FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT WHERE DATE >= DATEADD(MONTH, -3, CURRENT_DATE()))) SELECT l.TICKER, ROUND(((l.LATEST_PRICE - b.BASE_PRICE) / b.BASE_PRICE) * 100, 1) AS RETURN_PCT FROM latest l JOIN baseline b ON l.TICKER = b.TICKER ORDER BY RETURN_PCT DESC LIMIT 5'
     )
   );
 

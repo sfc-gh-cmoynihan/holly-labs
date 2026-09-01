@@ -27,7 +27,7 @@ graph TD
 
 ## Instructions
 
-Run `create_tables.sql` in Snowsight. The script:
+Run `data_engineering.sql` in Snowsight. The script:
 
 1. Creates `HOLLY_DB` database with STRUCTURED schema
 2. Loads S&P 500 companies reference table (503 companies)
@@ -66,4 +66,4 @@ Expected: ~503 companies, ~10M price rows, ~500K+ FX rate rows.
 
 ## Next Step
 
-[Step 4: Semantic Views →](../step_4_semantic_views/)
+[Step 4: Semantic Views →](../step4_semantic_views/)

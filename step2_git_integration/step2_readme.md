@@ -54,4 +54,4 @@ You should now see the `holly-labs` workspace with all step folders and the READ
 
 ## Next Step
 
-[Step 3: Data Engineering →](../step_3_data_engineering/)
+[Step 3: Data Engineering →](../step3_data_engineering/)

@@ -434,7 +434,7 @@ VALUES
     ('RF','Regions Financial Corporation','Financials','Regional Banks','Birmingham, Alabama','1998-08-28','1281761'),
     ('RJF','Raymond James Financial','Financials','Investment Banking & Brokerage','St. Petersburg, Florida','2017-03-20','720005'),
     ('RL','Ralph Lauren Corporation','Consumer Discretionary','Apparel, Accessories & Luxury Goods','New York City, New York','2007-02-02','1037038'),
-    ('RMD','ResMed|','Health Care','Health Care Equipment','San Diego, California','2017-07-26','943819'),
+    ('RMD','ResMed','Health Care','Health Care Equipment','San Diego, California','2017-07-26','943819'),
     ('ROK','Rockwell Automation','Industrials','Electrical Components & Equipment','Milwaukee, Wisconsin','2000-03-12','1024478'),
     ('ROL','Rollins, Inc.','Industrials','Environmental & Facilities Services','Atlanta, Georgia','2018-10-01','84839'),
     ('ROP','Roper Technologies','Information Technology','Electronic Equipment & Instruments','Sarasota, Florida','2009-12-23','882835'),

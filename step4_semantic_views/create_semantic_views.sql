@@ -4,7 +4,7 @@
 
 /*
 ================================================================================
-  Step 3: Create Semantic Views
+  Step 4: Create Semantic Views
   
   Semantic views tell Cortex Analyst how to translate natural language into SQL.
   Verified queries (VQRs) guarantee correct SQL for common question patterns.
@@ -62,7 +62,7 @@ CREATE OR REPLACE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV
       VERIFIED_AT 1743552000
       VERIFIED_BY 'ADMIN'
       ONBOARDING_QUESTION true
-      SQL 'SELECT DATE_TRUNC(''WEEK'', DATE) AS WEEK, TICKER, ROUND(AVG(VALUE), 2) AS SHARE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES WHERE TICKER IN (''MSFT'', ''GOOGL'') AND VARIABLE_NAME = ''Post-Market Close'' AND DATE >= DATEADD(MONTH, -6, CURRENT_DATE()) GROUP BY DATE_TRUNC(''WEEK'', DATE), TICKER ORDER BY WEEK, TICKER'
+      SQL 'SELECT DATE, TICKER, VALUE AS SHARE_PRICE FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES WHERE TICKER IN (''MSFT'', ''GOOGL'') AND VARIABLE_NAME = ''Post-Market Close'' AND DATE >= DATEADD(MONTH, -6, CURRENT_DATE()) ORDER BY DATE, TICKER'
     ),
     "What is the closing price of NVDA for the last 30 days?" AS (
       QUESTION 'What is the closing price of NVDA for the last 30 days?'

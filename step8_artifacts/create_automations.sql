@@ -4,14 +4,14 @@
 
 /*
 ================================================================================
-  Step 9: Automations
+  Step 8: Automations
   
   Schedule recurring Cortex Code runs as Snowflake AGENT TASKs.
   These run unattended on a cron schedule — no warehouse needed.
   
   Prerequisites:
   - AGENT TASK must be enabled on the account (one-time ACCOUNTADMIN step)
-  - Holly agent must be deployed (Step 6)
+  - Holly agent must be deployed (Step 5)
   
   Run these via the `cortex automation` CLI in Cortex Code Desktop,
   NOT as SQL worksheets. Each command below is a terminal command.

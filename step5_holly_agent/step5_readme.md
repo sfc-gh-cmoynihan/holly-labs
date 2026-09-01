@@ -94,4 +94,4 @@ Then open **Snowflake CoWork** and ask: "What is the latest share price of NVIDI
 
 ## Next Step
 
-[Step 6: Interactive Tables & Warehouses →](../step_7_interactive_tables/)
+[Step 6: Interactive Tables & Warehouses →](../step6_interactive_tables/)

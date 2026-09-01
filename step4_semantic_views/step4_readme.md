@@ -50,8 +50,9 @@ When a user asks "What is the latest price of NVIDIA?", Cortex Analyst uses the 
 
 Run `create_semantic_views.sql`. The script creates:
 
-1. **STOCK_PRICE_TIMESERIES_SV** — stock price queries with 5 verified queries
+1. **STOCK_PRICE_TIMESERIES_SV** — stock price queries with 6 verified queries
 2. **SP500_SV** — company fundamentals (sector, industry, membership)
+3. **FX_RATES_SV** — foreign exchange rate queries with 5 verified queries
 
 ## Verify It Worked
 
@@ -76,4 +77,4 @@ DESCRIBE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV;
 
 ## Next Step
 
-[Step 5: Holly Agent →](../step_6_holly_agent/)
+[Step 5: Holly Agent →](../step5_holly_agent/)

@@ -28,4 +28,4 @@ You should see this under Databases under `SNOWFLAKE_PUBLIC_DATA_PAID`, under `P
 
 ## Next Step
 
-[Step 2: Git Integration →](../step_2_git_integration/)
+[Step 2: Git Integration →](../step2_git_integration/)
