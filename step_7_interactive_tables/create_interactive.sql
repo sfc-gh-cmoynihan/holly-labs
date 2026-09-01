@@ -1,10 +1,10 @@
 -- Author: Colm Moynihan
 -- Date: 26-Aug-2026
--- Version: 1.4
+-- Version: 1.5
 
 /*
 ================================================================================
-  Step 6: Create Interactive Tables and Interactive Warehouse
+  Step 5: Create Interactive Tables and Interactive Warehouse
   
   Sub-second query response for stock price data in Holly.
 ================================================================================

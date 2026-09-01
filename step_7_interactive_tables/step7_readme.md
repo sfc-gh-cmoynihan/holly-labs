@@ -1,4 +1,4 @@
-# Step 7: Interactive Tables & Warehouses
+# Step 6: Interactive Tables & Warehouses
 
 **Time: 10 minutes**
 
@@ -78,4 +78,4 @@ LIMIT 5;
 
 ## Next Step
 
-[Step 8: Daily Data Refresh →](../step_8_daily_refresh/)
+[Step 7: Daily Data Refresh →](../step_8_daily_refresh/)

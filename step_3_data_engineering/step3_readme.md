@@ -8,56 +8,38 @@ Create a dedicated database with structured tables optimized for AI workloads �
 
 ```mermaid
 graph TD
-    subgraph "Marketplace"
+    subgraph Marketplace
         M1[STOCK_PRICE_TIMESERIES]
-        M2[SEC_CORPORATE_REPORT_*]
-        M3[COMPANY_EVENT_TRANSCRIPT_*]
         M4[FX_RATES_TIMESERIES]
     end
 
-    subgraph "HOLLY_DB"
-        subgraph "STRUCTURED schema"
+    subgraph HOLLY_DB
+        subgraph StructuredSchema [STRUCTURED schema]
             S1[SP500_COMPANIES]
             S2[STOCK_PRICE_TIMESERIES]
             S3[FX_RATES]
         end
-        subgraph "SEMI_STRUCTURED schema"
-            SS1[EDGAR_FILINGS]
-        end
-        subgraph "UNSTRUCTURED schema"
-            U1[PUBLIC_TRANSCRIPTS]
-        end
     end
 
     M1 -->|CTAS| S2
-    M2 -->|CTAS + JOIN| SS1
-    M3 -->|CTAS + JOIN| U1
     M4 -->|CTAS| S3
-
-    style S1 fill:#29B5E8
-    style S2 fill:#29B5E8
-    style S3 fill:#29B5E8
-    style SS1 fill:#F7A501
-    style U1 fill:#78C257
 ```
 
 ## Instructions
 
 Run `create_tables.sql` in Snowsight. The script:
 
-1. Creates `HOLLY_DB` database with 3 schemas
+1. Creates `HOLLY_DB` database with STRUCTURED schema
 2. Loads S&P 500 companies reference table (503 companies)
 3. Creates stock price table filtered to S&P 500 tickers
-4. Creates EDGAR filings table (10-K, 10-Q, 8-K since 2025)
-5. Creates transcripts table (all S&P 500 earnings calls)
-6. Enables change tracking for incremental AI refresh
+4. Creates FX rates table for major currency pairs
+5. Enables change tracking for incremental refresh
 
 ### Key Design Decisions
 
-- **S&P 500 from Wikipedia** — a Python UDTF with External Access fetches the live list from Wikipedia, ensuring you always have the current index constituents (no stale hardcoded lists)
-- **3 schemas** separate structured (prices, fundamentals), semi-structured (filings), and unstructured (transcripts) data
+- **S&P 500 companies** — static reference table with all current index constituents
 - **Clustering** on `(TICKER, DATE)` for fast time-series lookups
-- **Change tracking** enables Cortex Search incremental refresh without full reindexing
+- **Change tracking** enables incremental refresh without full rebuilds
 
 ## Verify It Worked
 
@@ -66,12 +48,10 @@ SELECT 'SP500_COMPANIES' AS TABLE_NAME, COUNT(*) AS ROWS FROM HOLLY_DB.STRUCTURE
 UNION ALL
 SELECT 'STOCK_PRICE_TIMESERIES', COUNT(*) FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES
 UNION ALL
-SELECT 'EDGAR_FILINGS', COUNT(*) FROM HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS
-UNION ALL
-SELECT 'PUBLIC_TRANSCRIPTS', COUNT(*) FROM HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS;
+SELECT 'FX_RATES', COUNT(*) FROM HOLLY_DB.STRUCTURED.FX_RATES;
 ```
 
-Expected: ~503 companies, ~10M price rows, ~50K+ filings, ~5K+ transcripts.
+Expected: ~503 companies, ~10M price rows, ~500K+ FX rate rows.
 
 ## Why Snowflake?
 
@@ -80,7 +60,7 @@ Expected: ~503 companies, ~10M price rows, ~50K+ filings, ~5K+ transcripts.
 | ETL pipelines with Spark/Airflow | Single CTAS statement — transforms at query time |
 | Manual partitioning for performance | Automatic micro-partitioning with clustering |
 | CDC pipelines for change detection | Built-in change tracking with zero config |
-| Separate systems for different data types | One platform: structured + semi-structured + unstructured |
+| Separate systems for different data types | One platform for all structured data |
 
 **Key advantage:** A single SQL script creates production-ready, AI-optimized tables from marketplace data. No Spark cluster, no ETL orchestration, no schema management. The clustering and change tracking are the only setup needed for high-performance AI workloads.
 

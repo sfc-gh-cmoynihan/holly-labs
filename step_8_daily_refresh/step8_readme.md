@@ -1,50 +1,32 @@
-# Step 8: Daily Data Refresh & Live Prices
+# Step 7: Daily Data Refresh & Live Prices
 
 **Time: 10 minutes**
 
 ## What You'll Build
 
-A scheduled task with a stored procedure that incrementally refreshes your data every day — keeping stock prices, SEC filings, and transcripts current without manual intervention.
+A scheduled task that incrementally refreshes FX rates every day — keeping exchange rate data current without manual intervention.
 
 ```mermaid
 graph LR
-    subgraph "Schedule"
-        CRON[CRON: 6 AM UTC Daily]
+    subgraph Schedule
+        CRON[CRON 6AM UTC Daily]
     end
 
-    subgraph "Task: DAILY_DATA_REFRESH"
-        SP[Stored Procedure<br/>MERGE incremental updates]
+    subgraph TaskRefresh [Task DAILY_DATA_REFRESH]
+        SP[MERGE incremental updates]
     end
 
-    subgraph "Marketplace"
-        M1[Stock Prices]
-        M2[SEC Filings]
-        M3[Transcripts]
+    subgraph Marketplace
         M4[FX Rates]
     end
 
-    subgraph "Holly DB"
-        T1[EDGAR_FILINGS]
-        T2[PUBLIC_TRANSCRIPTS]
+    subgraph HollyDB [Holly DB]
         T3[FX_RATES]
     end
 
-    subgraph "Auto-Refresh"
-        CS[Cortex Search<br/>Detects changes via<br/>change tracking]
-    end
-
     CRON --> SP
-    SP -->|MERGE| T1
-    SP -->|MERGE| T2
     SP -->|MERGE| T3
-    M2 --> SP
-    M3 --> SP
     M4 --> SP
-    T1 -->|Change tracking| CS
-    T2 -->|Change tracking| CS
-
-    style SP fill:#29B5E8
-    style CS fill:#29B5E8
 ```
 
 ## How It Works
@@ -140,6 +122,6 @@ SELECT * FROM TABLE(HOLLY_DB.STRUCTURED.GET_LIVE_PRICE('AAPL'));
 
 ## Next Step
 
-[Step 9: Artifacts →](../step_9_artifacts/)
+[Step 8: Artifacts →](../step_9_artifacts/)
 
 [← Back to README](../README.md)

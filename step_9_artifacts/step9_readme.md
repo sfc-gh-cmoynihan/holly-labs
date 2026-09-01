@@ -1,4 +1,4 @@
-# Step 9: Artifacts & Automations
+# Step 8: Artifacts & Automations
 
 **Time: 10 minutes**
 
@@ -177,10 +177,9 @@ You've built a complete financial research agent with:
 - Git integration (Step 2)
 - Data engineering (Step 3)
 - AI-powered structured queries (Step 4)
-- Semantic search over filings and transcripts (Step 5)
-- Intelligent orchestration with 20 sample questions (Step 6)
-- Sub-second interactive performance (Step 7)
-- Automatic daily refresh & live prices (Step 8)
-- Persistent, shareable artifacts (Step 9)
+- Intelligent orchestration with 15 sample questions (Step 5)
+- Sub-second interactive performance (Step 6)
+- Automatic daily refresh & live prices (Step 7)
+- Persistent, shareable artifacts (Step 8)
 
 [← Back to README](../README.md)

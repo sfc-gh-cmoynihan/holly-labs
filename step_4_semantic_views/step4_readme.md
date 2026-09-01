@@ -76,4 +76,4 @@ DESCRIBE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV;
 
 ## Next Step
 
-[Step 5: Cortex Search →](../step_5_cortex_search/)
+[Step 5: Holly Agent →](../step_6_holly_agent/)
