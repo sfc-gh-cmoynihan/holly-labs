@@ -1,10 +1,10 @@
-# Step 5: Holly Agent
+# Step 6: Holly Agent
 
 **Time: 10 minutes**
 
 ## What You'll Build
 
-Create Holly — a financial research agent that orchestrates semantic views, web search, and charting into a single conversational interface with 15 sample questions.
+Create Holly — a financial research agent that orchestrates semantic views backed by Interactive Tables, web search, and charting into a single conversational interface with sub-second query performance and 15 sample questions.
 
 ```mermaid
 graph TD
@@ -94,4 +94,4 @@ Then open **Snowflake CoWork** and ask: "What is the latest share price of NVIDI
 
 ## Next Step
 
-[Step 6: Interactive Tables & Warehouses →](../step6_interactive_tables/)
+[Step 7: Daily Data Refresh →](../step7_daily_refresh/)

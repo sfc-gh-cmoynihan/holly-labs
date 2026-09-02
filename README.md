@@ -32,8 +32,8 @@ The lab consists of 8 steps that **must be executed in order** (each step depend
 | 2 — Connect this repo to a Snowflake Git Workspace | [step2_readme.md](step2_git_integration/step2_readme.md) | — |
 | 3 — Build structured tables from raw Marketplace data | [step3_readme.md](step3_data_engineering/step3_readme.md) | [data_engineering.sql](step3_data_engineering/data_engineering.sql) |
 | 4 — Create Semantic Views with verified queries for Cortex Analyst | [step4_readme.md](step4_semantic_views/step4_readme.md) | [create_semantic_views.sql](step4_semantic_views/create_semantic_views.sql) |
-| 5 — Deploy the Holly agent with 5 tools and 15 sample questions | [step5_readme.md](step5_holly_agent/step5_readme.md) | [create_agent.sql](step5_holly_agent/create_agent.sql) |
-| 6 — Interactive Tables & Warehouses for sub-second queries | [step6_readme.md](step6_interactive_tables/step6_readme.md) | [create_interactive.sql](step6_interactive_tables/create_interactive.sql) |
+| 5 — Interactive Tables & Warehouses for sub-second queries | [step5_readme.md](step5_interactive_tables/step5_readme.md) | [create_interactive.sql](step5_interactive_tables/create_interactive.sql) |
+| 6 — Deploy the Holly agent with 5 tools and 15 sample questions | [step6_readme.md](step6_holly_agent/step6_readme.md) | [create_agent.sql](step6_holly_agent/create_agent.sql) |
 | 7 — Daily Refresh: Create a task to refresh the data | [step7_readme.md](step7_daily_refresh/step7_readme.md) | [create_task.sql](step7_daily_refresh/create_task.sql) |
 | 8 — How to create artifacts and schedule automations | [step8_readme.md](step8_artifacts/step8_readme.md) | — |
 

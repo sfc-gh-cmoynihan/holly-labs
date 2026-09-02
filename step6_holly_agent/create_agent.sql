@@ -1,10 +1,10 @@
 -- Author: Colm Moynihan
--- Date: 26-Aug-2026
--- Version: 2.6
+-- Date: 02-Sep-2026
+-- Version: 2.7
 
 /*
 ================================================================================
-  Step 5: Create Holly Agent
+  Step 6: Create Holly Agent
   
   Financial research agent with 5 tools and 15 sample questions.
   Includes chart_customization for smooth Vega-Lite rendering.
@@ -58,7 +58,7 @@ instructions:
     - Prefer internal data over web search. Only use WEB_SEARCH when no internal tool can answer.
 
     **Boundaries:**
-    - Data is daily close — not real-time. Say so if asked for "right now" prices.
+    - Data is daily close from Interactive Tables — sub-second queries but not real-time. Say so if asked for "right now" prices.
     - No investment advice, buy/sell signals, or target prices. Data and analysis only.
 
     <chart_customization>
@@ -143,19 +143,19 @@ tool_resources:
     semantic_view: "HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV"
     execution_environment:
       type: warehouse
-      warehouse: HOLLY_WH
+      warehouse: HOLLY_IW
     query_timeout: 120
   FX_RATES:
     semantic_view: "HOLLY_DB.STRUCTURED.FX_RATES_SV"
     execution_environment:
       type: warehouse
-      warehouse: HOLLY_WH
+      warehouse: HOLLY_IW
     query_timeout: 60
   SP500_COMPANIES:
     semantic_view: "HOLLY_DB.STRUCTURED.SP500_SV"
     execution_environment:
       type: warehouse
-      warehouse: HOLLY_WH
+      warehouse: HOLLY_IW
     query_timeout: 60
 $$;
 

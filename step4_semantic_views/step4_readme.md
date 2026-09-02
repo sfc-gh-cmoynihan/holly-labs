@@ -77,4 +77,4 @@ DESCRIBE SEMANTIC VIEW HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_SV;
 
 ## Next Step
 
-[Step 5: Holly Agent →](../step5_holly_agent/)
+[Step 5: Interactive Tables & Warehouses →](../step5_interactive_tables/)

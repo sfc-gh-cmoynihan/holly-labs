@@ -1,4 +1,4 @@
-# Step 6: Interactive Tables & Warehouses
+# Step 5: Interactive Tables & Warehouses
 
 **Time: 10 minutes**
 
@@ -78,4 +78,4 @@ LIMIT 5;
 
 ## Next Step
 
-[Step 7: Daily Data Refresh →](../step7_daily_refresh/)
+[Step 6: Holly Agent →](../step6_holly_agent/)
