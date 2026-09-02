@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
--- Date: 27-Aug-2026
--- Version: 1.0
+-- Date: 02-Sep-2026
+-- Version: 1.1
 
 /*
 ================================================================================
@@ -11,7 +11,7 @@
   
   Prerequisites:
   - AGENT TASK must be enabled on the account (one-time ACCOUNTADMIN step)
-  - Holly agent must be deployed (Step 5)
+  - Holly agent must be deployed (Step 6)
   
   Run these via the `cortex automation` CLI in Cortex Code Desktop,
   NOT as SQL worksheets. Each command below is a terminal command.
@@ -25,62 +25,119 @@
 -- ALTER ACCOUNT SET ENABLE_CORTEX_AGENT_TASK = TRUE;
 
 -- ============================================================================
--- AUTOMATION 1: Daily Market Summary
+-- AUTOMATION 1: Tech Stock Price Tracker
 -- 
--- Every weekday at 8:00 AM Dublin time, ask Holly for the top movers
--- and post a summary. Runs read-only (default).
+-- Every weekday at 8:00 AM Dublin time, plot closing prices for
+-- MSFT, AMZN, GOOGL, NVDA and summarise notable trends.
+-- Maps to sample question #1: "Plot the closing price of MSFT, AMZN,
+-- GOOGL, NVDA over the last 6 months"
 -- ============================================================================
 
 /*
 Run in Cortex Code terminal:
 
 cortex automation create \
-  --name "daily-market-summary" \
+  --name "tech-stock-tracker" \
   --schedule "weekdays at 8am" \
   --timezone "Europe/Dublin" \
   --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: What are the top 5 best performing S&P 500 stocks over the last 5 trading days, and what are the top 5 worst? Include percentage changes.
+Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months.
 
-Format the result as a clean summary with two sections: TOP MOVERS and BOTTOM MOVERS.
+Present the chart and include a brief commentary on any notable trends or divergences between the four stocks.
 
-End with: DAILY_MARKET_SUMMARY_OK date=$(date +%Y-%m-%d)"
+End with: TECH_STOCK_TRACKER_OK date=$(date +%Y-%m-%d)"
 */
 
 -- ============================================================================
--- AUTOMATION 2: Weekly Performance Report
+-- AUTOMATION 2: Top Performers Chart
 -- 
--- Every Monday at 9:00 AM Dublin time, generate a chart of last week's
--- top performers and save as an artifact.
+-- Every Monday at 9:00 AM Dublin time, generate a bar chart of the
+-- top 5 best performing S&P 500 stocks over the last 3 months.
+-- Maps to sample question #2: "Show a bar chart of the top 5 best
+-- performing stocks over the last 3 months"
 -- ============================================================================
 
 /*
 Run in Cortex Code terminal:
 
 cortex automation create \
-  --name "weekly-performance-report" \
+  --name "top-performers-chart" \
   --schedule "every Monday at 9am" \
   --timezone "Europe/Dublin" \
   --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to:
-1. Get the top 10 best performing S&P 500 stocks over the last 7 trading days with their percentage returns.
-2. Plot a bar chart of these top 10 performers (ticker on x-axis, % return on y-axis).
-3. Also get the current EUR/USD and GBP/USD exchange rates.
+Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Show a bar chart of the top 5 best performing stocks over the last 3 months.
 
-Compile a weekly summary report with:
-- Date range covered
-- Top 10 performers table (ticker, company name, % return)
-- Exchange rate snapshot
+Include each stock's percentage return and sector. Add a one-paragraph market commentary summarising the themes across the top performers.
 
-End with: WEEKLY_PERFORMANCE_REPORT_OK week_ending=$(date +%Y-%m-%d)"
+End with: TOP_PERFORMERS_CHART_OK date=$(date +%Y-%m-%d)"
 */
 
 -- ============================================================================
--- AUTOMATION 3: FX Rate Alert
+-- AUTOMATION 3: NVIDIA Price Check
 -- 
--- Every weekday at 7:00 AM Dublin time, check if EUR/USD moved more than
--- 1% in the previous trading day. If so, flag it.
+-- Every weekday at 7:00 AM New York time (before market open),
+-- check the latest NVIDIA closing price with 7-day and 30-day changes.
+-- Maps to sample question #3: "What is the latest share price of NVIDIA?"
+-- ============================================================================
+
+/*
+Run in Cortex Code terminal:
+
+cortex automation create \
+  --name "nvidia-price-check" \
+  --schedule "weekdays at 7am" \
+  --timezone "America/New_York" \
+  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+
+Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: What is the latest share price of NVIDIA?
+
+Also check: what was NVIDIA's share price 7 days ago and 30 days ago? Calculate the 7-day and 30-day percentage change.
+
+Format as:
+- Current price: \$X.XX (as of DATE)
+- 7-day change: +/-X.X%
+- 30-day change: +/-X.X%
+
+End with: NVIDIA_PRICE_CHECK_OK date=$(date +%Y-%m-%d) price=[value]"
+*/
+
+-- ============================================================================
+-- AUTOMATION 4: Microsoft vs Google Comparison
+-- 
+-- Every Monday at 8:00 AM Dublin time, compare MSFT and GOOGL stock
+-- prices over the last 6 months with performance analysis.
+-- Maps to sample question #4: "Compare the stock price of Microsoft
+-- and Google over the last 6 months"
+-- ============================================================================
+
+/*
+Run in Cortex Code terminal:
+
+cortex automation create \
+  --name "msft-vs-googl-weekly" \
+  --schedule "every Monday at 8am" \
+  --timezone "Europe/Dublin" \
+  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+
+Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Compare the stock price of Microsoft and Google over the last 6 months.
+
+Present the comparison chart. Then calculate:
+1. Which stock performed better over the 6-month period (% return)
+2. The current price spread between the two
+3. Any period where one significantly outperformed the other
+
+Format the numerical summary as a clean table.
+
+End with: MSFT_VS_GOOGL_OK date=$(date +%Y-%m-%d)"
+*/
+
+-- ============================================================================
+-- AUTOMATION 5: FX Rate Alert
+-- 
+-- Every weekday at 7:00 AM Dublin time, check if EUR/USD moved more
+-- than 1% in the previous trading day. If so, flag it.
 -- ============================================================================
 
 /*
@@ -123,17 +180,19 @@ End with: FX_RATE_ALERT_OK date=$(date +%Y-%m-%d) pct_change=[value]"
 cortex automation list
 
 -- Check recent run history and errors
-cortex automation doctor daily-market-summary
-cortex automation doctor weekly-performance-report
+cortex automation doctor tech-stock-tracker
+cortex automation doctor top-performers-chart
+cortex automation doctor nvidia-price-check
+cortex automation doctor msft-vs-googl-weekly
 cortex automation doctor fx-rate-alert
 
 -- Pause an automation
-cortex automation suspend daily-market-summary
+cortex automation suspend tech-stock-tracker
 
 -- Resume an automation
-cortex automation resume daily-market-summary
+cortex automation resume tech-stock-tracker
 
--- View what a fire actually did (get thread_id from doctor output)
+-- View what a run actually did (get thread_id from doctor output)
 cortex conversations transcript <thread_id>
 
 -- Delete an automation
