@@ -28,8 +28,9 @@
 -- ADMIN: Verify automations are enabled (granted to PUBLIC by default)
 -- ============================================================================
 
--- To check if automations are enabled, look for EXECUTE AGENT TASK:
-SHOW GRANTS OF ROLE PUBLIC;
+-- Check if EXECUTE AGENT TASK is granted to PUBLIC (automations are enabled by default):
+SHOW GRANTS TO ROLE PUBLIC;
+SELECT * FROM TABLE(RESULT_SCAN(LAST_QUERY_ID())) WHERE "privilege" = 'EXECUTE AGENT TASK';
 
 -- If automations were previously disabled, re-enable with:
 -- GRANT EXECUTE AGENT TASK ON ACCOUNT TO ROLE PUBLIC;
