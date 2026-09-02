@@ -157,7 +157,13 @@ sequenceDiagram
 
 ### Creating Your First Automation
 
-Run in the Cortex Code terminal (not a SQL worksheet):
+You can create all 5 automations at once by running the included script from the Cortex Code terminal:
+
+```bash
+./step8_artifacts/create_automations.sh
+```
+
+Or create them individually. Run in the Cortex Code terminal (not a SQL worksheet):
 
 ```bash
 cortex automation create \
