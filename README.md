@@ -35,7 +35,7 @@ The lab consists of 8 steps that **must be executed in order** (each step depend
 | 5 — Interactive Tables & Warehouses for sub-second queries | [step5_readme.md](step5_interactive_tables/step5_readme.md) | [create_interactive.sql](step5_interactive_tables/create_interactive.sql) |
 | 6 — Deploy the Holly agent with 5 tools and 15 sample questions | [step6_readme.md](step6_holly_agent/step6_readme.md) | [create_agent.sql](step6_holly_agent/create_agent.sql) |
 | 7 — Daily Refresh: Create a task to refresh the data | [step7_readme.md](step7_daily_refresh/step7_readme.md) | [create_task.sql](step7_daily_refresh/create_task.sql) |
-| 8 — How to create artifacts and schedule automations | [step8_readme.md](step8_artifacts/step8_readme.md) | [create_automations.sh](step8_artifacts/create_automations.sh) |
+| 8 — How to create artifacts and schedule automations | [step8_readme.md](step8_artifacts/step8_readme.md) | [create_automations.sql](step8_artifacts/create_automations.sql) |
 
 ## How to Run
 

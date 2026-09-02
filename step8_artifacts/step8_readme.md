@@ -121,193 +121,136 @@ Try saving these as artifacts for your daily workflow:
 
 ### What are Automations?
 
-Automations let you schedule recurring Cortex Code runs as **Snowflake AGENT TASKs**. They run unattended on a cron schedule — no warehouse needed, no human in the loop.
+[CoWork Automations](https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-cowork/automations) deliver AI-generated insights on a schedule. You subscribe to a question, and CoWork re-executes it against the latest data on the cadence you define — emailing you a summary, key metrics, and a link back to CoWork for follow-up questions.
 
-Think of an automation as a scheduled conversation: at the time you specify, Snowflake starts a Cortex Code session, executes your prompt (which can call Holly, run SQL, generate charts, etc.), and saves the result. You can review the output in your conversation history anytime.
+No external infrastructure, no cron jobs, no CLI. Everything is set up inside Snowsight.
 
 ### How Automations Work
 
 ```mermaid
 sequenceDiagram
-    participant Cron as CRON Schedule
-    participant AT as AGENT TASK
-    participant CC as Cortex Code Session
+    participant Schedule as Scheduled Time
+    participant CW as CoWork
     participant Holly as Holly Agent
+    participant Email as Your Inbox
 
-    Cron->>AT: Trigger at scheduled time
-    AT->>CC: Start unattended session
-    CC->>Holly: Execute prompt
-    Holly->>CC: Return results
-    CC->>AT: Save to conversation history
-    Note over AT: Available in cortex conversations
+    Schedule->>CW: Trigger automation
+    CW->>Holly: Re-execute your question
+    Holly->>CW: Fresh results + charts
+    CW->>Email: Summary + link to full report
+    Note over Email: Click link to open in CoWork<br/>and ask follow-up questions
 ```
 
-1. **You define the prompt** — what Holly should do each time (e.g. "get the top 5 performers")
-2. **You set the schedule** — cron expression or natural language ("weekdays at 8am")
-3. **Snowflake runs it** — in a managed sandbox, using your permissions
-4. **You review the output** — in your conversation history, or via `cortex automation doctor`
+1. **You ask a question** — Holly returns the answer with charts and data
+2. **You schedule it** — tell CoWork to send it on a recurring cadence
+3. **CoWork runs it** — re-executes your question against current data each time
+4. **You get an email** — with a summary and a link to the full report in CoWork
 
 ### Prerequisites
 
-1. Enable AGENT TASK on your account (one-time, run as ACCOUNTADMIN in Snowsight):
-   ```sql
-   ALTER ACCOUNT SET ENABLE_CORTEX_AGENT_TASK = TRUE;
-   ```
-2. Have Cortex Code Desktop installed with the `cortex` CLI available
+- Holly agent deployed (Step 6)
+- `EXECUTE AGENT TASK` privilege (granted to PUBLIC by default)
+- A verified email address on your Snowflake account
 
-### Creating Your First Automation
+### Creating an Automation
 
-You can create all 5 automations at once by running the included script from the Cortex Code terminal:
+**Method 1: Conversationally (recommended)**
 
-```bash
-./step8_artifacts/create_automations.sh
-```
+1. Open CoWork and ask Holly a question
+2. After Holly returns the result, say: *"Send me this report every Monday at 9am"*
+3. CoWork confirms the schedule and first delivery date
 
-Or create them individually. Run in the Cortex Code terminal (not a SQL worksheet):
+**Method 2: From the Automations tab**
 
-```bash
-cortex automation create \
-  --name "my-automation-name" \
-  --schedule "weekdays at 8am" \
-  --timezone "Europe/Dublin" \
-  --prompt "Your instructions for the unattended session..."
-```
+1. In the left navigation, select **Automations**
+2. Select **Create automation** > **Manually**
+3. Enter the **Name**, **Instructions** (the question), and **Frequency**
+4. Select **Create**
 
-**Key parameters:**
+### 4 Automations for Holly's Top Sample Questions
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `--name` | Unique identifier for the automation | `"daily-market-summary"` |
-| `--schedule` | When to run (natural language or cron) | `"weekdays at 8am"`, `"every Monday at 9am"` |
-| `--timezone` | Timezone for the schedule | `"Europe/Dublin"`, `"America/New_York"` |
-| `--prompt` | The full instructions for the unattended session | See examples below |
+These map to the first four sample questions in Holly's agent definition. For each one, open CoWork, ask Holly the question, then schedule it.
 
-**Prompt best practices:**
-- Always start with: *"You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions."*
-- Be specific about what data you want and how to format it
-- End with a status marker so you can grep for success in logs
+---
 
-### Automations for Holly's Top 4 Sample Questions
+**Automation 1: Tech Stock Tracker** (Daily)
 
-These four automations correspond to the first four sample questions in Holly's agent definition. Copy and run each in the Cortex Code terminal.
+> Ask Holly: **"Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months"**
 
-**Automation 1: Tech Stock Price Tracker**
+After the chart renders, say: *"Send me this report every weekday at 8am"*
 
-Runs daily and plots the closing prices for the four key tech stocks.
+| Field | Value |
+|-------|-------|
+| Name | Tech Stock Tracker |
+| Instructions | Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months |
+| Frequency | Daily (weekdays) |
 
-```bash
-cortex automation create \
-  --name "tech-stock-tracker" \
-  --schedule "weekdays at 8am" \
-  --timezone "Europe/Dublin" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+---
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months.
+**Automation 2: Top Performers Chart** (Weekly)
 
-Present the chart and include a brief commentary on any notable trends or divergences between the four stocks.
+> Ask Holly: **"Show a bar chart of the top 5 best performing stocks over the last 3 months"**
 
-End with: TECH_STOCK_TRACKER_OK date=$(date +%Y-%m-%d)"
-```
+After the chart renders, say: *"Send me this report every Monday at 9am"*
 
-**Automation 2: Top Performers Chart**
+| Field | Value |
+|-------|-------|
+| Name | Top Performers Chart |
+| Instructions | Show a bar chart of the top 5 best performing stocks over the last 3 months |
+| Frequency | Weekly (Monday) |
 
-Runs weekly and generates a bar chart of the best performing stocks.
+---
 
-```bash
-cortex automation create \
-  --name "top-performers-chart" \
-  --schedule "every Monday at 9am" \
-  --timezone "Europe/Dublin" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+**Automation 3: NVIDIA Price Check** (Daily)
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Show a bar chart of the top 5 best performing stocks over the last 3 months.
+> Ask Holly: **"What is the latest share price of NVIDIA?"**
 
-Include each stock's percentage return and sector. Add a one-paragraph market commentary summarising the themes across the top performers.
+After the result, say: *"Send me this report every weekday at 7am"*
 
-End with: TOP_PERFORMERS_CHART_OK date=$(date +%Y-%m-%d)"
-```
+| Field | Value |
+|-------|-------|
+| Name | NVIDIA Price Check |
+| Instructions | What is the latest share price of NVIDIA? |
+| Frequency | Daily (weekdays) |
 
-**Automation 3: NVIDIA Price Check**
+---
 
-Runs daily before market open to capture the latest NVIDIA closing price.
+**Automation 4: Microsoft vs Google Comparison** (Weekly)
 
-```bash
-cortex automation create \
-  --name "nvidia-price-check" \
-  --schedule "weekdays at 7am" \
-  --timezone "America/New_York" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+> Ask Holly: **"Compare the stock price of Microsoft and Google over the last 6 months"**
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: What is the latest share price of NVIDIA?
+After the chart renders, say: *"Send me this report every Monday at 8am"*
 
-Also check: what was NVIDIA's share price 7 days ago and 30 days ago? Calculate the 7-day and 30-day percentage change.
+| Field | Value |
+|-------|-------|
+| Name | Microsoft vs Google Comparison |
+| Instructions | Compare the stock price of Microsoft and Google over the last 6 months |
+| Frequency | Weekly (Monday) |
 
-Format as:
-- Current price: $X.XX (as of DATE)
-- 7-day change: +/-X.X%
-- 30-day change: +/-X.X%
-
-End with: NVIDIA_PRICE_CHECK_OK date=$(date +%Y-%m-%d) price=[value]"
-```
-
-**Automation 4: Microsoft vs Google Comparison**
-
-Runs weekly to compare the two stocks and track relative performance.
-
-```bash
-cortex automation create \
-  --name "msft-vs-googl-weekly" \
-  --schedule "every Monday at 8am" \
-  --timezone "Europe/Dublin" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
-
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Compare the stock price of Microsoft and Google over the last 6 months.
-
-Present the comparison chart. Then calculate:
-1. Which stock performed better over the 6-month period (% return)
-2. The current price spread between the two
-3. Any period where one significantly outperformed the other
-
-Format the numerical summary as a clean table.
-
-End with: MSFT_VS_GOOGL_OK date=$(date +%Y-%m-%d)"
-```
+---
 
 ### Managing Automations
 
-```bash
-# List all automations
-cortex automation list
+You can manage automations conversationally in CoWork or from the **Automations tab** in the left navigation.
 
-# Check run history and diagnose errors
-cortex automation doctor tech-stock-tracker
-cortex automation doctor top-performers-chart
-cortex automation doctor nvidia-price-check
-cortex automation doctor msft-vs-googl-weekly
-
-# Pause an automation
-cortex automation suspend tech-stock-tracker
-
-# Resume a paused automation
-cortex automation resume tech-stock-tracker
-
-# View what a specific run actually did (get thread_id from doctor output)
-cortex conversations transcript <thread_id>
-
-# Delete an automation you no longer need
-cortex automation drop nvidia-price-check
-```
+| Action | Conversational | Automations Tab |
+|--------|---------------|-----------------|
+| List automations | *"What automations do I have?"* | View the list directly |
+| Change schedule | *"Change my Monday report to 7am instead"* | Edit the automation |
+| Pause | *"Pause the NVIDIA Price Check report"* | Toggle pause |
+| Resume | *"Resume the NVIDIA Price Check report"* | Toggle resume |
+| Delete | *"Delete my weekly top performers report"* | Delete button |
 
 ### Key Points
 
 | Aspect | Detail |
 |--------|--------|
-| **Compute** | No warehouse needed — AGENT TASKs run in a Snowflake-managed sandbox |
-| **Permissions** | Runs as you — uses your permissions, visible in your conversation history |
-| **Safety** | Read-only by default — can't accidentally write or delete data |
-| **Tooling** | Only Cortex Code built-in tools and Snowflake-managed MCP servers |
-| **Cost** | Billed as serverless compute — no idle warehouse costs |
-| **Monitoring** | Use `cortex automation doctor` to check health and review outputs |
+| **Delivery** | Email with summary, key metrics, and link to full report in CoWork |
+| **Data freshness** | Each run re-executes the question against current data |
+| **Security** | Caller's-rights model — runs with your role, respects RBAC and masking policies |
+| **Follow-up** | Click the email link to open the report in CoWork and ask follow-up questions |
+| **Cost** | Uses your own compute, billed through standard Snowflake task billing |
+| **Frequency** | Hourly, daily, weekly, or monthly |
 
 ---
 
@@ -318,12 +261,11 @@ cortex automation drop nvidia-price-check
 | Screenshot charts and paste into Slack/email | Live-updating artifact that re-queries on view |
 | Build dashboards for every repeating question | Save any CoWork response as a one-click artifact |
 | Manage dashboard permissions separately | RBAC inherited automatically — same as table access |
-| Schedule cron jobs on external infrastructure | `cortex automation create` — serverless, managed |
+| Schedule cron jobs on external infrastructure | Say "send me this every Monday" — no infra needed |
 | Stale data in exported reports | Always-fresh data on every view or scheduled run |
-| No context for follow-up analysis | Ask follow-up questions directly on any artifact |
-| Separate monitoring for scheduled jobs | Built-in `doctor` command with run history |
+| No context for follow-up analysis | Click email link to continue the conversation in CoWork |
 
-**Key advantage:** Artifacts and automations turn Holly from a conversational tool into a **persistent, automated analytics layer**. Any chart or table Holly generates can become a live, shared, permission-aware asset — without building a dashboard. And automations mean Holly works for you even when you're not at your desk.
+**Key advantage:** Artifacts and automations turn Holly from a conversational tool into a **persistent, automated analytics layer**. Any chart or table Holly generates can become a live, shared, permission-aware asset — without building a dashboard. And automations mean Holly works for you even when you're not at your desk — just ask CoWork to send it on a schedule.
 
 ---
 

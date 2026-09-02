@@ -1,200 +1,190 @@
 -- Author: Colm Moynihan
 -- Date: 02-Sep-2026
--- Version: 1.1
+-- Version: 2.0
 
 /*
 ================================================================================
   Step 8: Automations
   
-  Schedule recurring Cortex Code runs as Snowflake AGENT TASKs.
-  These run unattended on a cron schedule — no warehouse needed.
+  Schedule recurring reports using Snowflake CoWork Automations.
+  
+  CoWork Automations deliver AI-generated insights on a schedule — each run
+  re-executes your question against the latest data and emails you the result
+  with a link back to CoWork for follow-up questions.
   
   Prerequisites:
-  - AGENT TASK must be enabled on the account (one-time ACCOUNTADMIN step)
   - Holly agent must be deployed (Step 6)
+  - EXECUTE AGENT TASK privilege (granted to PUBLIC by default)
+  - A verified email address on your Snowflake account
   
-  Run these via the `cortex automation` CLI in Cortex Code Desktop,
-  NOT as SQL worksheets. Each command below is a terminal command.
+  How to use this file:
+  - Open it in Snowsight via the Git Workspace
+  - Follow the instructions below to create each automation in CoWork
+  - The SQL statements at the end are optional admin commands
 ================================================================================
 */
 
 -- ============================================================================
--- ENABLE AGENT TASKS (one-time, run as ACCOUNTADMIN in Snowsight)
+-- ADMIN: Verify automations are enabled (granted to PUBLIC by default)
 -- ============================================================================
 
--- ALTER ACCOUNT SET ENABLE_CORTEX_AGENT_TASK = TRUE;
+-- To check if automations are enabled, look for EXECUTE AGENT TASK:
+SHOW GRANTS OF ROLE PUBLIC;
+
+-- If automations were previously disabled, re-enable with:
+-- GRANT EXECUTE AGENT TASK ON ACCOUNT TO ROLE PUBLIC;
+
+-- To restrict automations to specific roles only:
+-- REVOKE EXECUTE AGENT TASK ON ACCOUNT FROM ROLE PUBLIC;
+-- GRANT EXECUTE AGENT TASK ON ACCOUNT TO ROLE <role_name>;
+
+/*
+================================================================================
+  HOW TO CREATE AN AUTOMATION IN COWORK
+  
+  There are two ways to create an automation:
+  
+  METHOD 1: Conversationally (recommended)
+  -----------------------------------------
+  1. Open Snowflake CoWork
+  2. Ask Holly the question (copy from the examples below)
+  3. After Holly returns the result, say:
+     "Send me this report every [schedule]"
+  4. CoWork confirms the schedule and first delivery date
+  
+  METHOD 2: From the Automations tab
+  ------------------------------------
+  1. In the left navigation, select the Automations tab
+  2. Select "Create automation"
+  3. Choose "Manually"
+  4. Enter the Name, Instructions (the question), and Frequency
+  5. Select "Create"
+================================================================================
+*/
 
 -- ============================================================================
 -- AUTOMATION 1: Tech Stock Price Tracker
--- 
--- Every weekday at 8:00 AM Dublin time, plot closing prices for
--- MSFT, AMZN, GOOGL, NVDA and summarise notable trends.
--- Maps to sample question #1: "Plot the closing price of MSFT, AMZN,
--- GOOGL, NVDA over the last 6 months"
+--
+-- Schedule: Every weekday (daily)
+-- What it does: Plots MSFT, AMZN, GOOGL, NVDA closing prices over 6 months
+-- Maps to Holly sample question #1
 -- ============================================================================
 
 /*
-Run in Cortex Code terminal:
+  STEP 1: Open CoWork and ask Holly:
 
-cortex automation create \
-  --name "tech-stock-tracker" \
-  --schedule "weekdays at 8am" \
-  --timezone "Europe/Dublin" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+    Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months.
+  STEP 2: After the chart renders, say:
 
-Present the chart and include a brief commentary on any notable trends or divergences between the four stocks.
+    Send me this report every weekday at 8am
 
-End with: TECH_STOCK_TRACKER_OK date=$(date +%Y-%m-%d)"
+  OR create manually in the Automations tab:
+    Name:         Tech Stock Tracker
+    Instructions: Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months
+    Frequency:    Daily
 */
 
 -- ============================================================================
 -- AUTOMATION 2: Top Performers Chart
--- 
--- Every Monday at 9:00 AM Dublin time, generate a bar chart of the
--- top 5 best performing S&P 500 stocks over the last 3 months.
--- Maps to sample question #2: "Show a bar chart of the top 5 best
--- performing stocks over the last 3 months"
+--
+-- Schedule: Every Monday (weekly)
+-- What it does: Bar chart of top 5 S&P 500 performers over 3 months
+-- Maps to Holly sample question #2
 -- ============================================================================
 
 /*
-Run in Cortex Code terminal:
+  STEP 1: Open CoWork and ask Holly:
 
-cortex automation create \
-  --name "top-performers-chart" \
-  --schedule "every Monday at 9am" \
-  --timezone "Europe/Dublin" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+    Show a bar chart of the top 5 best performing stocks over the last 3 months
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Show a bar chart of the top 5 best performing stocks over the last 3 months.
+  STEP 2: After the chart renders, say:
 
-Include each stock's percentage return and sector. Add a one-paragraph market commentary summarising the themes across the top performers.
+    Send me this report every Monday at 9am
 
-End with: TOP_PERFORMERS_CHART_OK date=$(date +%Y-%m-%d)"
+  OR create manually in the Automations tab:
+    Name:         Top Performers Chart
+    Instructions: Show a bar chart of the top 5 best performing stocks over the last 3 months
+    Frequency:    Weekly (Monday)
 */
 
 -- ============================================================================
 -- AUTOMATION 3: NVIDIA Price Check
--- 
--- Every weekday at 7:00 AM New York time (before market open),
--- check the latest NVIDIA closing price with 7-day and 30-day changes.
--- Maps to sample question #3: "What is the latest share price of NVIDIA?"
+--
+-- Schedule: Every weekday (daily)
+-- What it does: Gets latest NVIDIA share price
+-- Maps to Holly sample question #3
 -- ============================================================================
 
 /*
-Run in Cortex Code terminal:
+  STEP 1: Open CoWork and ask Holly:
 
-cortex automation create \
-  --name "nvidia-price-check" \
-  --schedule "weekdays at 7am" \
-  --timezone "America/New_York" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+    What is the latest share price of NVIDIA?
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: What is the latest share price of NVIDIA?
+  STEP 2: After the result, say:
 
-Also check: what was NVIDIA's share price 7 days ago and 30 days ago? Calculate the 7-day and 30-day percentage change.
+    Send me this report every weekday at 7am
 
-Format as:
-- Current price: \$X.XX (as of DATE)
-- 7-day change: +/-X.X%
-- 30-day change: +/-X.X%
-
-End with: NVIDIA_PRICE_CHECK_OK date=$(date +%Y-%m-%d) price=[value]"
+  OR create manually in the Automations tab:
+    Name:         NVIDIA Price Check
+    Instructions: What is the latest share price of NVIDIA?
+    Frequency:    Daily
 */
 
 -- ============================================================================
 -- AUTOMATION 4: Microsoft vs Google Comparison
--- 
--- Every Monday at 8:00 AM Dublin time, compare MSFT and GOOGL stock
--- prices over the last 6 months with performance analysis.
--- Maps to sample question #4: "Compare the stock price of Microsoft
--- and Google over the last 6 months"
+--
+-- Schedule: Every Monday (weekly)
+-- What it does: Compares MSFT and GOOGL stock prices over 6 months
+-- Maps to Holly sample question #4
 -- ============================================================================
 
 /*
-Run in Cortex Code terminal:
+  STEP 1: Open CoWork and ask Holly:
 
-cortex automation create \
-  --name "msft-vs-googl-weekly" \
-  --schedule "every Monday at 8am" \
-  --timezone "Europe/Dublin" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+    Compare the stock price of Microsoft and Google over the last 6 months
 
-Use the Holly agent (COWORK.AGENTS.HOLLY) to answer: Compare the stock price of Microsoft and Google over the last 6 months.
+  STEP 2: After the chart renders, say:
 
-Present the comparison chart. Then calculate:
-1. Which stock performed better over the 6-month period (% return)
-2. The current price spread between the two
-3. Any period where one significantly outperformed the other
+    Send me this report every Monday at 8am
 
-Format the numerical summary as a clean table.
-
-End with: MSFT_VS_GOOGL_OK date=$(date +%Y-%m-%d)"
+  OR create manually in the Automations tab:
+    Name:         Microsoft vs Google Comparison
+    Instructions: Compare the stock price of Microsoft and Google over the last 6 months
+    Frequency:    Weekly (Monday)
 */
 
 -- ============================================================================
--- AUTOMATION 5: FX Rate Alert
--- 
--- Every weekday at 7:00 AM Dublin time, check if EUR/USD moved more
--- than 1% in the previous trading day. If so, flag it.
+-- MANAGING AUTOMATIONS
+--
+-- You can manage automations conversationally in CoWork or from the
+-- Automations tab in the left navigation.
 -- ============================================================================
 
 /*
-Run in Cortex Code terminal:
+  Conversational management — just ask CoWork:
 
-cortex automation create \
-  --name "fx-rate-alert" \
-  --schedule "weekdays at 7am" \
-  --timezone "Europe/Dublin" \
-  --prompt "You are running unattended in a Snowflake AGENT TASK; complete the task autonomously and do NOT ask clarifying questions.
+    "What automations do I have?"
+    "Pause the NVIDIA Price Check report"
+    "Resume the NVIDIA Price Check report"
+    "Change my Monday report to 7am instead"
+    "Delete my weekly top performers report"
 
-Run this SQL to check EUR/USD movement:
-
-SELECT 
-    a.DATE AS today_date,
-    a.VALUE AS today_rate,
-    b.VALUE AS prev_rate,
-    ROUND((a.VALUE - b.VALUE) / b.VALUE * 100, 3) AS pct_change
-FROM HOLLY_DB.STRUCTURED.FX_RATES a
-JOIN HOLLY_DB.STRUCTURED.FX_RATES b 
-    ON b.BASE_CURRENCY_ID = a.BASE_CURRENCY_ID 
-    AND b.QUOTE_CURRENCY_ID = a.QUOTE_CURRENCY_ID
-    AND b.DATE = (SELECT MAX(DATE) FROM HOLLY_DB.STRUCTURED.FX_RATES WHERE DATE < a.DATE AND BASE_CURRENCY_ID = 'EUR' AND QUOTE_CURRENCY_ID = 'USD')
-WHERE a.BASE_CURRENCY_ID = 'EUR' 
-  AND a.QUOTE_CURRENCY_ID = 'USD'
-  AND a.DATE = (SELECT MAX(DATE) FROM HOLLY_DB.STRUCTURED.FX_RATES WHERE BASE_CURRENCY_ID = 'EUR' AND QUOTE_CURRENCY_ID = 'USD')
-
-If ABS(pct_change) > 1.0, report: FX ALERT - EUR/USD moved [pct_change]% on [date]. Current rate: [today_rate].
-If ABS(pct_change) <= 1.0, report: EUR/USD stable. Change: [pct_change]% on [date]. Rate: [today_rate].
-
-End with: FX_RATE_ALERT_OK date=$(date +%Y-%m-%d) pct_change=[value]"
+  From the Automations tab:
+    - View all automations and their run history (last 2 months)
+    - Edit, pause, resume, or delete any automation
+    - Click into a run to see the full report and ask follow-up questions
 */
 
 -- ============================================================================
--- MANAGEMENT COMMANDS (run in Cortex Code terminal)
+-- SUMMARY
 -- ============================================================================
 
 /*
--- List all automations
-cortex automation list
-
--- Check recent run history and errors
-cortex automation doctor tech-stock-tracker
-cortex automation doctor top-performers-chart
-cortex automation doctor nvidia-price-check
-cortex automation doctor msft-vs-googl-weekly
-cortex automation doctor fx-rate-alert
-
--- Pause an automation
-cortex automation suspend tech-stock-tracker
-
--- Resume an automation
-cortex automation resume tech-stock-tracker
-
--- View what a run actually did (get thread_id from doctor output)
-cortex conversations transcript <thread_id>
-
--- Delete an automation
-cortex automation drop fx-rate-alert
+  | #  | Automation                    | Question                                                                       | Schedule          |
+  |----|-------------------------------|--------------------------------------------------------------------------------|-------------------|
+  | 1  | Tech Stock Tracker            | Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months      | Weekdays 8am      |
+  | 2  | Top Performers Chart          | Show a bar chart of the top 5 best performing stocks over the last 3 months    | Weekly (Mon 9am)  |
+  | 3  | NVIDIA Price Check            | What is the latest share price of NVIDIA?                                      | Weekdays 7am      |
+  | 4  | Microsoft vs Google           | Compare the stock price of Microsoft and Google over the last 6 months         | Weekly (Mon 8am)  |
 */
