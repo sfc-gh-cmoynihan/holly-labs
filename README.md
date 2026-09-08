@@ -7,6 +7,10 @@
 
 ## Overview
 
+![Holly Architecture](images/holly_architecture.png)
+
+The diagram shows Holly's end-to-end architecture. On the left, **Snowflake Marketplace** provides S&P 500 market data and SEC filings with no ETL required — data flows directly into **HOLLY_DB**. In the middle, two AI engines power the agent: **Cortex Analyst** uses **Semantic Views** to translate natural language into SQL over structured data (stock prices, FX rates, company info), while **Cortex Search** uses **vector embeddings** to enable semantic search over unstructured SEC filings and earnings transcripts. On the right, **Holly** orchestrates all tools through a single **Agent Orchestration** layer, serving self-service consumers via **CoWork** (web) and **Mobile**.
+
 Holly Labs is a hands-on lab that walks you through building a production-grade AI financial research agent on Snowflake. By the end, you'll have a working agent called **Holly** that can answer natural language questions about S&P 500 stock prices, company fundamentals, foreign exchange rates, SEC filings, and earnings call transcripts — with sub-second query performance and smooth charting.
 
 ## Use Cases
