@@ -50,7 +50,7 @@ graph TD
 | **Data types** | Structured only | Structured + Unstructured |
 | **New capabilities** | — | Search 56K SEC filings, 120K earnings transcripts |
 | **New question types** | — | "What did the 10-K say?", "What did management say?" |
-| **Sample questions** | 15 | 20 |
+| **Sample questions** | 11 | 15 |
 
 ## Instructions
 
@@ -58,7 +58,7 @@ Run `update_holly_agent.sql`. The script:
 
 1. Recreates Holly with 7 tools (3 analyst, 2 search, web search, charting)
 2. Updates the orchestration instructions with routing for filing and transcript questions
-3. Adds 6 new sample questions covering SEC filings and earnings calls
+3. Adds 4 new sample questions covering SEC filings and earnings calls (15 total)
 4. Re-grants access and restores the display profile
 
 ### New Tools
@@ -72,12 +72,10 @@ Run `update_holly_agent.sql`. The script:
 
 | # | Question | Tool Used |
 |---|----------|-----------|
-| 11 | What did NVIDIA's latest 10-K say about revenue growth? | SEC_FILINGS_SEARCH |
-| 12 | What did Apple disclose about AI in their most recent filing? | SEC_FILINGS_SEARCH |
+| 12 | What did NVIDIA's latest 10-K say about revenue growth? | SEC_FILINGS_SEARCH |
 | 13 | Compare the risk factors in Microsoft and Google's latest 10-K filings | SEC_FILINGS_SEARCH |
 | 14 | What did Jensen Huang say about data center demand? | TRANSCRIPTS_SEARCH |
 | 15 | What guidance did Amazon give in their latest earnings call? | TRANSCRIPTS_SEARCH |
-| 16 | What did Meta's CFO say about capital expenditure? | TRANSCRIPTS_SEARCH |
 
 ## Verify It Worked
 

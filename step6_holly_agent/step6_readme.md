@@ -46,9 +46,9 @@ Run `create_agent.sql`. The script creates:
 
 1. The Holly agent with 5 tools (3 analyst, web search, charting)
 2. Chart customization with monotone interpolation for smooth stock charts
-3. 15 sample questions spanning all tool types
+3. 11 sample questions spanning all tool types
 
-### 15 Sample Questions
+### 11 Sample Questions
 
 | # | Question | Tool Used |
 |---|----------|-----------|
@@ -61,12 +61,8 @@ Run `create_agent.sql`. The script creates:
 | 7 | Which oil and gas companies are in the S&P 500? | SP500_COMPANIES |
 | 8 | Is Tesla in the S&P 500? When was it added? | SP500_COMPANIES |
 | 9 | What is the current EUR/USD exchange rate? | FX_RATES |
-| 10 | Chart the USD to EUR exchange rate over the last 12 months | FX_RATES + CHART |
-| 11 | Chart the USD to GBP exchange rate over the last 12 months | FX_RATES + CHART |
-| 12 | What is the USD to GBP exchange rate over the last 3 months | FX_RATES |
-| 13 | Plot the stock price of the top 3 semiconductor companies over 6 months | SP500 + STOCK_PRICES + CHART |
-| 14 | What is the latest news about NVIDIA? | WEB_SEARCH |
-| 15 | What happened to Tesla stock today? | WEB_SEARCH |
+| 10 | Chart the USD to GBP exchange rate over the last 12 months | FX_RATES + CHART |
+| 11 | What is the latest news about NVIDIA? | WEB_SEARCH |
 
 ## Verify It Worked
 

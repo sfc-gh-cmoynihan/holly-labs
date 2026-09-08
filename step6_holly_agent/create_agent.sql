@@ -92,12 +92,8 @@ instructions:
     - question: "Which oil and gas companies are in the S&P 500?"
     - question: "Is Tesla in the S&P 500? When was it added?"
     - question: "What is the current EUR/USD exchange rate?"
-    - question: "Chart the USD to EUR exchange rate over the last 12 months"
     - question: "Chart the USD to GBP exchange rate over the last 12 months"
-    - question: "What is the USD to GBP exchange rate over the last 3 months"
-    - question: "Plot the stock price of the top 3 semiconductor companies over 6 months"
     - question: "What is the latest news about NVIDIA?"
-    - question: "What happened to Tesla stock today?"
 
 tools:
   - tool_spec:

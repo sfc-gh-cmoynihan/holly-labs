@@ -96,20 +96,11 @@ instructions:
     - question: "Is Tesla in the S&P 500? When was it added?"
     - question: "What is the current EUR/USD exchange rate?"
     - question: "Chart the USD to GBP exchange rate over the last 12 months"
+    - question: "What is the latest news about NVIDIA?"
     - question: "What did NVIDIA's latest 10-K say about revenue growth?"
-    - question: "What did Apple disclose about AI in their most recent filing?"
     - question: "Compare the risk factors in Microsoft and Google's latest 10-K filings"
     - question: "What did Jensen Huang say about data center demand?"
     - question: "What guidance did Amazon give in their latest earnings call?"
-    - question: "What did Meta's CFO say about capital expenditure?"
-    - question: "What is the latest news about NVIDIA?"
-    - question: "What happened to Tesla stock today?"
-    - question: "Compare Nvidia's revenue growth vs AMD using their latest filings"
-    - question: "Plot the stock price of the top 3 semiconductor companies over 6 months"
-    - question: "What are the key risk factors in Tesla's latest 10-K?"
-    - question: "Summarise Apple's latest 8-K filing"
-    - question: "What did Satya Nadella say about AI in Microsoft's last earnings call?"
-    - question: "Compare what Amazon and Google said about cloud growth in their latest earnings calls"
 
 tools:
   - tool_spec:
