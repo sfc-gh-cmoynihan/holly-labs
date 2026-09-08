@@ -4,7 +4,7 @@
 
 ## What You'll Build
 
-Create Holly — a financial research agent that orchestrates semantic views backed by Interactive Tables, web search, and charting into a single conversational interface with sub-second query performance and 15 sample questions.
+Create Holly — a financial research agent that orchestrates semantic views backed by Interactive Tables, web search, and charting into a single conversational interface with sub-second query performance and 11 sample questions.
 
 ```mermaid
 graph TD

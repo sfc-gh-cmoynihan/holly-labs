@@ -102,4 +102,4 @@ Then open **Snowflake CoWork** and try:
 
 ## Next Step
 
-Continue to the next step or return to [Holly Labs README](../README.md).
+You're done! Return to [Holly Labs README](../README.md).

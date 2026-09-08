@@ -269,16 +269,21 @@ You can manage automations conversationally in CoWork or from the **Automations 
 
 ---
 
-## You're Done!
+## Next Step
 
-You've built a complete financial research agent with:
+[Step 8: Cortex Search →](../step8_cortex_search/)
+
+---
+
+## You've Built So Far
 - Live marketplace data (Step 1)
 - Git integration (Step 2)
 - Data engineering (Step 3)
 - AI-powered structured queries via Semantic Views (Step 4)
 - Sub-second interactive performance (Step 5)
-- Intelligent orchestration with 15 sample questions (Step 6)
-- Automatic daily refresh & live prices (Step 7)
-- Persistent artifacts & scheduled automations (Step 8)
+- Intelligent orchestration with 11 sample questions (Step 6)
+- Persistent artifacts & scheduled automations (Step 7)
+- Cortex Search over SEC filings and earnings transcripts (Step 8)
+- Updated Holly with 7 tools and 15 sample questions (Step 9)
 
 [← Back to README](../README.md)

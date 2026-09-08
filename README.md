@@ -7,12 +7,14 @@
 
 ## Overview
 
-Holly Labs is a hands-on lab that walks you through building a production-grade AI financial research agent on Snowflake. By the end, you'll have a working agent called **Holly** that can answer natural language questions about S&P 500 stock prices, company fundamentals, and foreign exchange rates — with sub-second query performance and smooth charting.
+Holly Labs is a hands-on lab that walks you through building a production-grade AI financial research agent on Snowflake. By the end, you'll have a working agent called **Holly** that can answer natural language questions about S&P 500 stock prices, company fundamentals, foreign exchange rates, SEC filings, and earnings call transcripts — with sub-second query performance and smooth charting.
 
 ## Use Cases
 
 - **Stock price analysis** — Daily closing prices, comparisons, and performance rankings across S&P 500 companies
 - **Foreign exchange rates** — Daily exchange rates for major currency pairs (EUR, GBP, JPY, CHF, CAD, AUD vs USD)
+- **SEC filings search** — Semantic search over 10-K, 10-Q, and 8-K filings for S&P 500 companies
+- **Earnings transcripts search** — Search earnings call transcripts for management commentary and guidance
 - **Live market context** — Web search fallback for breaking news and current events
 - **Interactive dashboards** — Sub-second charting powered by Interactive Tables and Interactive Warehouses
 
@@ -24,7 +26,7 @@ Holly Labs is a hands-on lab that walks you through building a production-grade 
 
 ## Steps
 
-The lab consists of 8 steps that **must be executed in order** (each step depends on objects created in prior steps):
+The lab consists of 9 steps that **must be executed in order** (each step depends on objects created in prior steps):
 
 | Step | Readme | .sql |
 |------|--------|------|
@@ -41,8 +43,8 @@ The lab consists of 8 steps that **must be executed in order** (each step depend
 ## How to Run
 
 1. Complete Step 1 (Marketplace install) and Step 2 (Git Workspace) manually via Snowsight
-2. For Steps 3–7, open each `.sql` file in the Git Workspace and run it (use "Run All" in the worksheet)
-3. Step 8 is a walkthrough — follow the instructions in the readme
+2. For Steps 3–6 and 8–9, open each `.sql` file in the Git Workspace and run it (use "Run All" in the worksheet)
+3. Step 7 is a walkthrough — follow the instructions in the readme
 
 ## Architecture
 
@@ -60,7 +62,9 @@ Snowflake Marketplace
                      ▼
 ┌─────────────────────────────────────────────────┐
 │              Holly Agent (CoWork)                │
-│  Tools: STOCK_PRICES, SP500_COMPANIES,          │
-│         FX_RATES, WEB_SEARCH, DATA_TO_CHART     │
+│  Structured: STOCK_PRICES, SP500_COMPANIES,     │
+│              FX_RATES                            │
+│  Search:     SEC_FILINGS, TRANSCRIPTS           │
+│  Other:      WEB_SEARCH, DATA_TO_CHART          │
 └─────────────────────────────────────────────────┘
 ```
