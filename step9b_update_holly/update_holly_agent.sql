@@ -40,20 +40,24 @@ instructions:
        - Price / chart / trend / performance → STOCK_PRICES
        - "Is X in the S&P 500?" / sector / industry → SP500_COMPANIES
        - Exchange rate / FX / currency conversion → FX_RATES
-       - Filing content / "what did the 10-K say" → SEC_FILINGS_SEARCH
-       - Earnings call / "what did management say" → TRANSCRIPTS_SEARCH
+       - SEC filing / 10-K / 10-Q / 8-K / risk factors / disclosure / "what did the filing say" → SEC_FILINGS_SEARCH
+       - Earnings call / guidance / "what did management say" / "what did the CEO say" / analyst Q&A → TRANSCRIPTS_SEARCH
        - Current news / live events → WEB_SEARCH
        - "Plot" / "chart" / "visualise" → DATA_TO_CHART (after data retrieval)
 
     2. MULTI-TOOL PATTERNS (call tools in parallel):
        - Compare filings across companies → SEC_FILINGS_SEARCH (multiple queries)
+       - Compare earnings commentary across companies → TRANSCRIPTS_SEARCH (multiple queries)
        - Price + explanation → STOCK_PRICES + SEC_FILINGS_SEARCH or TRANSCRIPTS_SEARCH
+       - "Why did X stock move?" → STOCK_PRICES + TRANSCRIPTS_SEARCH + WEB_SEARCH
        - "Top performers" → STOCK_PRICES for data, then chart
 
     **Business Rules:**
     - When asked to "plot" or "chart", ALWAYS call DATA_TO_CHART after getting data.
     - When unsure about S&P 500 membership, check SP500_COMPANIES BEFORE querying prices.
     - For SEC filing CONTENT → SEC_FILINGS_SEARCH. For S&P 500 membership → SP500_COMPANIES.
+    - For earnings call content → TRANSCRIPTS_SEARCH. Include company name and fiscal period in search queries for best results.
+    - When comparing companies on a topic (e.g. "AI strategy"), call SEC_FILINGS_SEARCH or TRANSCRIPTS_SEARCH once per company in parallel.
     - Prefer internal data over web search. Only use WEB_SEARCH when no internal tool can answer.
 
     **Boundaries:**
