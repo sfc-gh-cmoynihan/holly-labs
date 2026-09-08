@@ -1,4 +1,4 @@
-# Step 8: Artifacts & Automations
+# Step 7: Artifacts & Automations
 
 **Time: 15 minutes**
 

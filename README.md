@@ -33,9 +33,10 @@ The lab consists of 8 steps that **must be executed in order** (each step depend
 | 3 — Build structured tables from raw Marketplace data | [step3_readme.md](step3_data_engineering/step3_readme.md) | [data_engineering.sql](step3_data_engineering/data_engineering.sql) |
 | 4 — Create Semantic Views with verified queries for Cortex Analyst | [step4_readme.md](step4_semantic_views/step4_readme.md) | [create_semantic_views.sql](step4_semantic_views/create_semantic_views.sql) |
 | 5 — Interactive Tables & Warehouses for sub-second queries | [step5_readme.md](step5_interactive_tables/step5_readme.md) | [create_interactive.sql](step5_interactive_tables/create_interactive.sql) |
-| 6 — Deploy the Holly agent with 5 tools and 15 sample questions | [step6_readme.md](step6_holly_agent/step6_readme.md) | [create_agent.sql](step6_holly_agent/create_agent.sql) |
-| 7 — Daily Refresh: Create a task to refresh the data | [step7_readme.md](step7_daily_refresh/step7_readme.md) | [create_task.sql](step7_daily_refresh/create_task.sql) |
-| 8 — How to create artifacts and schedule automations | [step8_readme.md](step8_artifacts/step8_readme.md) | [create_automations.sql](step8_artifacts/create_automations.sql) |
+| 6 — Deploy the Holly agent with 5 tools and 11 sample questions | [step6_readme.md](step6_holly_agent/step6_readme.md) | [create_agent.sql](step6_holly_agent/create_agent.sql) |
+| 7 — How to create artifacts and schedule automations | [step7_readme.md](step7_artifacts/step7_readme.md) | [create_automations.sql](step7_artifacts/create_automations.sql) |
+| 8 — Cortex Search: SEC filings and earnings transcripts | [step8_readme.md](step8_cortex_search/step8_readme.md) | [create_cortex_search.sql](step8_cortex_search/create_cortex_search.sql) |
+| 9 — Update Holly with Cortex Search tools (15 sample questions) | [step9_readme.md](step9_update_holly/step9_readme.md) | [update_holly_agent.sql](step9_update_holly/update_holly_agent.sql) |
 
 ## How to Run
 

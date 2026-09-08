@@ -90,4 +90,4 @@ Then open **Snowflake CoWork** and ask: "What is the latest share price of NVIDI
 
 ## Next Step
 
-[Step 7: Daily Data Refresh →](../step7_daily_refresh/)
+[Step 7: Artifacts & Automations →](../step7_artifacts/)

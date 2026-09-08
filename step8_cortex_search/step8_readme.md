@@ -1,4 +1,4 @@
-# Step 9: Cortex Search
+# Step 8: Cortex Search
 
 **Time: 15-20 minutes**
 
@@ -94,4 +94,4 @@ SELECT PARSE_JSON(
 
 ## Next Step
 
-[Step 9b: Update Holly Agent →](../step9b_update_holly/)
+[Step 9: Update Holly Agent →](../step9_update_holly/)

@@ -1,4 +1,4 @@
-# Step 9b: Update Holly Agent
+# Step 9: Update Holly Agent
 
 **Time: 2 minutes**
 
@@ -44,7 +44,7 @@ graph TD
 
 ## What Changed
 
-| | Before (Step 6) | After (Step 9b) |
+| | Before (Step 6) | After (Step 9) |
 |---|---|---|
 | **Tools** | 5 | 7 |
 | **Data types** | Structured only | Structured + Unstructured |

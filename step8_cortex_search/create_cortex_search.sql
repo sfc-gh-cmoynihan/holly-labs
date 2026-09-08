@@ -4,7 +4,7 @@
 
 /*
 ================================================================================
-  Step 9: Cortex Search
+  Step 8: Cortex Search
   
   Create EDGAR filings and public transcripts tables from Cybersyn/SEC data,
   then build Cortex Search Services for semantic search over both.

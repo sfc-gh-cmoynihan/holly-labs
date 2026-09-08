@@ -4,7 +4,7 @@
 
 /*
 ================================================================================
-  Step 8: Automations
+  Step 7: Automations
   
   Schedule recurring reports using Snowflake CoWork Automations.
   
