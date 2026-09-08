@@ -269,6 +269,13 @@ You can manage automations conversationally in CoWork or from the **Automations 
 
 ---
 
+## Verify It Worked
+
+1. Open **Snowflake CoWork** and ask Holly: "What is the latest share price of NVIDIA?"
+2. After Holly responds, click **Save as artifact** — confirm it appears in your Artifacts list
+3. Create an automation by saying: "Send me this report every Monday at 9am" — confirm the schedule is created
+4. Check the **Automations** tab in the left navigation to see your scheduled automation
+
 ## Next Step
 
 [Step 8: Cortex Search →](../step8_cortex_search/)

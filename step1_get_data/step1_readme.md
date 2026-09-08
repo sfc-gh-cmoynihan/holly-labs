@@ -22,6 +22,18 @@ You should see this under Databases under `SNOWFLAKE_PUBLIC_DATA_PAID`, under `P
 
 ![Database view](images/6.png)
 
+## Verify It Worked
+
+```sql
+-- Check the database exists
+SHOW DATABASES LIKE 'SNOWFLAKE_PUBLIC_DATA_PAID';
+
+-- Check you can query a table
+SELECT COUNT(*) FROM SNOWFLAKE_PUBLIC_DATA_PAID.PUBLIC_DATA.STOCK_PRICE_TIMESERIES;
+```
+
+You should see a row count in the millions.
+
 ## Next Step
 
 [Step 2: Git Integration →](../step2_git_integration/)
