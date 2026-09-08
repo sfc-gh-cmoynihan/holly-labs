@@ -182,9 +182,9 @@ tool_resources:
       warehouse: HOLLY_IW
     query_timeout: 60
   SEC_FILINGS_SEARCH:
-    cortex_search_service: "HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_SEARCH"
+    search_service: "HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_SEARCH"
   TRANSCRIPTS_SEARCH:
-    cortex_search_service: "HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS_SEARCH"
+    search_service: "HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS_SEARCH"
 $$;
 
 -- ============================================================================
