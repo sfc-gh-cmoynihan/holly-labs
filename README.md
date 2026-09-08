@@ -46,6 +46,22 @@ The lab consists of 9 steps that **must be executed in order** (each step depend
 2. For Steps 3–6 and 8–9, open each `.sql` file in the Git Workspace and run it (use "Run All" in the worksheet)
 3. Step 7 is a walkthrough — follow the instructions in the readme
 
+## Verify It Worked
+
+Each step readme has a detailed verification section. Here's the quick-check summary:
+
+| Step | Verify |
+|------|--------|
+| 1 | `SHOW DATABASES LIKE 'SNOWFLAKE_PUBLIC_DATA_PAID'` returns a row |
+| 2 | Git Workspace appears under **Projects > Workspaces** in Snowsight |
+| 3 | `SELECT COUNT(*) FROM HOLLY_DB.STRUCTURED.SP500_COMPANIES` returns 503 |
+| 4 | `SHOW SEMANTIC VIEWS IN DATABASE HOLLY_DB` returns 3 views |
+| 5 | `SHOW INTERACTIVE TABLES IN DATABASE HOLLY_DB` returns STOCK_PRICE_TIMESERIES |
+| 6 | `DESCRIBE AGENT COWORK.AGENTS.HOLLY` returns the agent definition |
+| 7 | Save an artifact and create an automation in CoWork |
+| 8 | `SHOW CORTEX SEARCH SERVICES IN DATABASE HOLLY_DB` returns 2 ACTIVE services |
+| 9 | Ask Holly "What did NVIDIA's latest 10-K say about revenue growth?" in CoWork |
+
 ## Architecture
 
 ```
