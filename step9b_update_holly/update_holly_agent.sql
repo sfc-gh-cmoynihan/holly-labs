@@ -102,6 +102,10 @@ instructions:
     - question: "What happened to Tesla stock today?"
     - question: "Compare Nvidia's revenue growth vs AMD using their latest filings"
     - question: "Plot the stock price of the top 3 semiconductor companies over 6 months"
+    - question: "What are the key risk factors in Tesla's latest 10-K?"
+    - question: "Summarise Apple's latest 8-K filing"
+    - question: "What did Satya Nadella say about AI in Microsoft's last earnings call?"
+    - question: "Compare what Amazon and Google said about cloud growth in their latest earnings calls"
 
 tools:
   - tool_spec:
