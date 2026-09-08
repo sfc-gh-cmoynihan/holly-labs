@@ -6,8 +6,8 @@
 ================================================================================
   Step 9: Cortex Search
   
-  Create public transcripts table from Cybersyn S&P 500 earnings calls and
-  build Cortex Search Services for SEC filings and transcripts.
+  Create EDGAR filings and public transcripts tables from Cybersyn/SEC data,
+  then build Cortex Search Services for semantic search over both.
   Runtime: ~15-20 minutes (indexing is the bottleneck)
 ================================================================================
 */
@@ -43,13 +43,40 @@ INNER JOIN HOLLY_DB.STRUCTURED.SP500_COMPANIES s ON t.PRIMARY_TICKER = s.SYMBOL;
 ALTER TABLE HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS SET CHANGE_TRACKING = TRUE;
 
 -- ============================================================================
--- 2. CREATE CORTEX SEARCH SERVICES
+-- 2. CREATE EDGAR FILINGS DATA (SEC filings for S&P 500 companies)
+-- ============================================================================
+
+CREATE OR REPLACE TABLE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS
+    COMMENT = 'SEC filings for Cortex Search'
+AS
+SELECT 
+    r.COMPANY_NAME,
+    r.FORM_TYPE AS ANNOUNCEMENT_TYPE,
+    r.FILED_DATE,
+    r.FISCAL_PERIOD,
+    r.FISCAL_YEAR,
+    a.ITEM_NUMBER,
+    a.ITEM_TITLE,
+    a.PLAINTEXT_CONTENT AS ANNOUNCEMENT_TEXT
+FROM SNOWFLAKE_PUBLIC_DATA_PAID.PUBLIC_DATA.SEC_CORPORATE_REPORT_ITEM_ATTRIBUTES a
+INNER JOIN SNOWFLAKE_PUBLIC_DATA_PAID.PUBLIC_DATA.SEC_CORPORATE_REPORT_INDEX r
+    ON a.ADSH = r.ADSH 
+INNER JOIN HOLLY_DB.STRUCTURED.SP500_COMPANIES s
+    ON LPAD(r.CIK, 10, '0') = LPAD(s.CIK, 10, '0')
+WHERE r.FILED_DATE >= '2025-01-01'
+  AND r.FORM_TYPE IN ('8-K', '10-K', '10-Q');
+
+ALTER TABLE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS SET CHANGE_TRACKING = TRUE;
+ALTER TABLE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS CLUSTER BY (COMPANY_NAME, FILED_DATE);
+
+-- ============================================================================
+-- 3. CREATE CORTEX SEARCH SERVICES
 -- ============================================================================
 
 -- Scale up for Cortex Search indexing (most time-consuming step)
 ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = '4X-LARGE';
 
--- 2.1 SEC Filings Search
+-- 3.1 SEC Filings Search
 CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_SEARCH
     ON ANNOUNCEMENT_TEXT
     ATTRIBUTES COMPANY_NAME, ANNOUNCEMENT_TYPE, FILED_DATE, FISCAL_PERIOD, FISCAL_YEAR, ITEM_NUMBER, ITEM_TITLE
@@ -60,7 +87,7 @@ AS (
     FROM HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS
 );
 
--- 2.2 Public Transcripts Search
+-- 3.2 Public Transcripts Search
 CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS_SEARCH
     ON TRANSCRIPT_TEXT
     ATTRIBUTES COMPANY_NAME, PRIMARY_TICKER, EVENT_TYPE, FISCAL_PERIOD, FISCAL_YEAR
@@ -78,7 +105,7 @@ AS (
 ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = 'MEDIUM';
 
 -- ============================================================================
--- 3. VERIFY SEARCH SERVICES
+-- 4. VERIFY SEARCH SERVICES
 -- ============================================================================
 
 SHOW CORTEX SEARCH SERVICES IN DATABASE HOLLY_DB;
