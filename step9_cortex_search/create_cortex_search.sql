@@ -15,6 +15,9 @@
 USE ROLE ACCOUNTADMIN;
 USE WAREHOUSE HOLLY_WH;
 
+CREATE SCHEMA IF NOT EXISTS HOLLY_DB.UNSTRUCTURED;
+CREATE SCHEMA IF NOT EXISTS HOLLY_DB.SEMI_STRUCTURED;
+
 -- ============================================================================
 -- 1. CREATE PUBLIC TRANSCRIPTS DATA (All S&P 500 transcripts from Cybersyn)
 -- ============================================================================
