@@ -94,4 +94,4 @@ SELECT PARSE_JSON(
 
 ## Next Step
 
-[Step 10: Update Holly Agent →](../step10_update_holly/)
+[Step 9b: Update Holly Agent →](../step9b_update_holly/)

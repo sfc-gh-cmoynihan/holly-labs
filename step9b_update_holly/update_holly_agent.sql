@@ -4,7 +4,7 @@
 
 /*
 ================================================================================
-  Step 10: Update Holly Agent with Cortex Search Services
+  Step 9b: Update Holly Agent with Cortex Search Services
 
   Adds two Cortex Search tools to Holly:
     - SEC_FILINGS_SEARCH  (EDGAR filings via HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_SEARCH)
