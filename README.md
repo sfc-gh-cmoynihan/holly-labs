@@ -1,4 +1,4 @@
-# Holly Labs — Build an AI Financial Research Agent on Snowflake
+# Holly - Build an AI FS Agent on Snowflake
 
 <p align="center">
   <img src="images/holly_logo.png" alt="Holly" width="200">
