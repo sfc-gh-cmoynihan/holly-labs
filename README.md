@@ -4,8 +4,6 @@
   <img src="images/holly_logo.png" alt="Holly" width="200">
 </p>
 
-<h3 align="center">Holly — An Intelligent FS Agent — powered by Snowflake</h3>
-
 ![Holly Architecture](images/holly_architecture.png)
 
 **Repo:** https://github.com/sfc-gh-cmoynihan/holly-labs  
