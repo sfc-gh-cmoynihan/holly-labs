@@ -1,8 +1,12 @@
 # Holly Labs — Build an AI Financial Research Agent on Snowflake
 
-![Holly the FS Agent](images/holly_architecture.png)
+<p align="center">
+  <img src="images/holly_logo.png" alt="Holly" width="200">
+</p>
 
-**Holly is an Intelligent FS Agent — powered by Snowflake**
+<h3 align="center">Holly — An Intelligent FS Agent — powered by Snowflake</h3>
+
+![Holly Architecture](images/holly_architecture.png)
 
 **Repo:** https://github.com/sfc-gh-cmoynihan/holly-labs  
 **Author:** Colm Moynihan  
