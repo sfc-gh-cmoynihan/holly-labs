@@ -196,3 +196,20 @@ FROM HOLLY_DB.STRUCTURED.FX_RATES_IT
 WHERE BASE_CURRENCY_ID = 'EUR' AND QUOTE_CURRENCY_ID = 'USD'
 ORDER BY DATE DESC
 LIMIT 5;
+
+-- ============================================================================
+-- 7. ZERO-COPY INTERACTIVE (No Interactive Tables needed)
+-- ============================================================================
+
+-- As of Sep 2026, Interactive Warehouses can query standard and Iceberg tables
+-- directly — no need to create Interactive Tables first. Just attach the table
+-- to warm the IW cache, then query it with sub-second latency.
+--
+-- Blog: https://www.snowflake.com/en/blog/engineering/zero-copy-interactive-analytics/
+-- Docs: https://docs.snowflake.com/en/user-guide/interactive
+
+-- Example: Attach SP500_COMPANIES (a standard table) directly to the IW
+ALTER WAREHOUSE HOLLY_IW ADD TABLES (HOLLY_DB.STRUCTURED.SP500_COMPANIES);
+
+-- This standard table now returns in sub-second via the IW — no IT required
+SELECT * FROM HOLLY_DB.STRUCTURED.SP500_COMPANIES WHERE SYMBOL = 'NVDA';

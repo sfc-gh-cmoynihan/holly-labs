@@ -12,8 +12,12 @@ graph LR
         T1[Regular Table] -->|~2-5s| W1[Standard Warehouse]
     end
 
-    subgraph "Interactive Path"
+    subgraph "Interactive Table Path"
         IT[Interactive Table<br/>Pre-loaded in memory] -->|~200ms| IW[Interactive Warehouse<br/>Always-hot compute]
+    end
+
+    subgraph "Zero-Copy Path"
+        ST[Standard Table<br/>Attached to IW] -->|~200ms| IW2[Interactive Warehouse<br/>Caches data automatically]
     end
 
     subgraph "Result"
@@ -22,9 +26,12 @@ graph LR
 
     W1 --> R
     IW --> R
+    IW2 --> R
 
     style IT fill:#29B5E8
     style IW fill:#29B5E8
+    style ST fill:#71C6E0
+    style IW2 fill:#29B5E8
 ```
 
 ## What are Interactive Tables and Warehouses?
@@ -37,6 +44,24 @@ graph LR
 **Interactive Warehouses** are always-hot compute clusters that keep Interactive Tables loaded in memory. They include:
 - Automatic fallback to a standard warehouse for queries that don't hit Interactive Tables
 - No cold-start latency — always ready to serve
+
+## Zero-Copy Interactive (New — Sep 2026)
+
+As of September 2026, Interactive Warehouses can also query **standard tables and Iceberg tables directly** — no need to create Interactive Tables first. This is called [Zero-Copy Interactive](https://www.snowflake.com/en/blog/engineering/zero-copy-interactive-analytics/).
+
+**How it works:**
+- Attach any existing table to an Interactive Warehouse with `ALTER WAREHOUSE ... ADD TABLES`
+- The IW automatically caches the data for sub-second queries
+- Attaching is an optimization, not a prerequisite — any table can be queried through an IW
+
+**When to use which:**
+
+| Approach | Best For |
+|----------|----------|
+| **Interactive Tables** | Dedicated serving with pre-aggregation or specific projections |
+| **Zero-Copy Interactive** | Quick low-latency access to existing tables without creating new objects |
+
+This lab uses Interactive Tables for stock prices and FX rates (the primary serving path), and demonstrates Zero-Copy with SP500_COMPANIES as a simpler alternative.
 
 ## Instructions
 
