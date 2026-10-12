@@ -67,26 +67,89 @@ This lab uses Interactive Tables for stock prices and FX rates (the primary serv
 
 Run `create_interactive.sql`. The script:
 
-1. Creates an Interactive Table from stock price data
-2. Creates an Interactive Warehouse (MEDIUM size)
-3. Creates a fallback warehouse for non-interactive queries
+1. Creates an Interactive Table from stock price data (STOCK_PRICE_TIMESERIES_IT)
+2. Creates an Interactive Warehouse (HOLLY_IW, MEDIUM size)
+3. Sets a fallback warehouse for non-interactive queries
 4. Attaches the Interactive Table to the Interactive Warehouse
+5. Creates an FX rates Interactive Table (FX_RATES_IT) and attaches it
+6. Updates semantic views to point to the Interactive Tables
+7. Demonstrates Zero-Copy by attaching SP500_COMPANIES (a standard table) directly
+
+### How the Pieces Fit Together
+
+```mermaid
+graph TD
+    subgraph Sources ["Source Tables"]
+        S1[STOCK_PRICE_TIMESERIES]
+        S2[FX_RATES]
+        S3[SP500_COMPANIES]
+    end
+
+    subgraph Interactive ["Interactive Tables (Optimized Copy)"]
+        IT1[STOCK_PRICE_TIMESERIES_IT<br/>Clustered by TICKER, DATE]
+        IT2[FX_RATES_IT<br/>Clustered by CURRENCY, DATE]
+    end
+
+    subgraph Warehouse ["Interactive Warehouse"]
+        IW[HOLLY_IW<br/>Always-hot, sub-second]
+        FB[HOLLY_WH<br/>Fallback warehouse]
+    end
+
+    subgraph Views ["Semantic Views"]
+        SV1[STOCK_PRICE_TIMESERIES_SV]
+        SV2[FX_RATES_SV]
+        SV3[SP500_SV]
+    end
+
+    S1 -->|CREATE IT AS SELECT| IT1
+    S2 -->|CREATE IT AS SELECT| IT2
+    IT1 -->|ADD TABLES| IW
+    IT2 -->|ADD TABLES| IW
+    S3 -->|"ADD TABLES (Zero-Copy)"| IW
+    IW -->|timeout fallback| FB
+    IT1 --> SV1
+    IT2 --> SV2
+    S3 --> SV3
+    SV1 --> Holly[Holly Agent]
+    SV2 --> Holly
+    SV3 --> Holly
+
+    style IW fill:#29B5E8
+    style IT1 fill:#29B5E8
+    style IT2 fill:#29B5E8
+    style S3 fill:#71C6E0
+```
+
+### What the Script Creates
+
+| Object | Type | Purpose |
+|--------|------|---------|
+| STOCK_PRICE_TIMESERIES_IT | Interactive Table | ~5.5M rows of daily stock prices, clustered by ticker and date |
+| FX_RATES_IT | Interactive Table | ~600K rows of FX rates, clustered by currency pair and date |
+| HOLLY_IW | Interactive Warehouse | Always-hot compute for sub-second queries |
+| HOLLY_WH | Standard Warehouse | Fallback for queries exceeding 5-second IW limit |
+| STOCK_PRICE_TIMESERIES_SV | Semantic View | Updated to point at IT (was standard table) |
+| FX_RATES_SV | Semantic View | Updated to point at IT (was standard table) |
+| SP500_COMPANIES | Standard Table (attached) | Zero-Copy: attached to IW without creating an IT |
 
 ## Verify It Worked
 
 ```sql
--- Check Interactive Table exists
+-- Check Interactive Tables exist
 SHOW INTERACTIVE TABLES IN SCHEMA HOLLY_DB.STRUCTURED;
 
--- Check Interactive Warehouse
+-- Check Interactive Warehouse and see which tables are attached
 SHOW WAREHOUSES LIKE 'HOLLY_IW';
 
--- Test query speed (should be <500ms)
+-- Test Interactive Table query speed (should be <500ms)
 SELECT TICKER, DATE, VALUE AS CLOSING_PRICE
 FROM HOLLY_DB.STRUCTURED.STOCK_PRICE_TIMESERIES_IT
 WHERE TICKER = 'NVDA' AND VARIABLE_NAME = 'Post-Market Close'
 ORDER BY DATE DESC
 LIMIT 5;
+
+-- Test Zero-Copy query speed (standard table, no IT)
+SELECT * FROM HOLLY_DB.STRUCTURED.SP500_COMPANIES WHERE SYMBOL = 'NVDA';
 ```
 
 ## Why Snowflake?
