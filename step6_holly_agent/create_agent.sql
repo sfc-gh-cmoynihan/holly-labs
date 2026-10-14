@@ -158,10 +158,17 @@ $$;
 -- Grant access
 GRANT USAGE ON AGENT COWORK.AGENTS.HOLLY TO ROLE PUBLIC;
 
--- Add Holly to the Snowflake CoWork object (required if account has a CoWork object)
+-- Add Holly to the Snowflake CoWork object (required if account has a CoWork object).
 -- Without this, Holly is only accessible via direct link or Snowsight, not the CoWork app.
-ALTER SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT ADD AGENT COWORK.AGENTS.HOLLY;
-GRANT USAGE ON SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT TO ROLE PUBLIC;
+-- This block is optional — it succeeds silently if no CoWork object exists on the account.
+BEGIN
+    ALTER SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT ADD AGENT COWORK.AGENTS.HOLLY;
+    GRANT USAGE ON SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT TO ROLE PUBLIC;
+EXCEPTION
+    WHEN OTHER THEN
+        -- No CoWork object on this account — Holly is still usable via direct link
+        NULL;
+END;
 
 -- Set display profile
 ALTER AGENT COWORK.AGENTS.HOLLY SET PROFILE = '{"display_name": "Holly - Financial Research Agent", "avatar": "RobotAgentIcon", "color": "var(--chartDim_3-x11ij0mo)"}';

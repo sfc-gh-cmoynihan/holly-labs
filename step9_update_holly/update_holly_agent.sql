@@ -188,9 +188,16 @@ $$;
 
 GRANT USAGE ON AGENT COWORK.AGENTS.HOLLY TO ROLE PUBLIC;
 
--- Re-add Holly to the Snowflake CoWork object (CREATE OR REPLACE removes it)
-ALTER SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT ADD AGENT COWORK.AGENTS.HOLLY;
-GRANT USAGE ON SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT TO ROLE PUBLIC;
+-- Re-add Holly to the Snowflake CoWork object (CREATE OR REPLACE removes it).
+-- This block is optional — it succeeds silently if no CoWork object exists on the account.
+BEGIN
+    ALTER SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT ADD AGENT COWORK.AGENTS.HOLLY;
+    GRANT USAGE ON SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT TO ROLE PUBLIC;
+EXCEPTION
+    WHEN OTHER THEN
+        -- No CoWork object on this account — Holly is still usable via direct link
+        NULL;
+END;
 
 ALTER AGENT COWORK.AGENTS.HOLLY SET PROFILE = '{"display_name": "Holly - Financial Research Agent", "avatar": "RobotAgentIcon", "color": "var(--chartDim_3-x11ij0mo)"}';
 
