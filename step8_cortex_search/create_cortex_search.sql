@@ -8,12 +8,15 @@
   
   Create EDGAR filings and public transcripts tables from Cybersyn/SEC data,
   then build Cortex Search Services for semantic search over both.
-  Runtime: ~15-20 minutes (indexing is the bottleneck)
+  Runtime: ~5-10 minutes (runs on 4X-LARGE throughout)
 ================================================================================
 */
 
 USE ROLE ACCOUNTADMIN;
 USE WAREHOUSE HOLLY_WH;
+
+-- Scale up for the entire step (CTAS + indexing)
+ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = '4X-LARGE';
 
 CREATE SCHEMA IF NOT EXISTS HOLLY_DB.UNSTRUCTURED;
 CREATE SCHEMA IF NOT EXISTS HOLLY_DB.SEMI_STRUCTURED;
@@ -38,7 +41,8 @@ SELECT
     t.CREATED_AT,
     t.UPDATED_AT
 FROM SNOWFLAKE_PUBLIC_DATA_PAID.PUBLIC_DATA.COMPANY_EVENT_TRANSCRIPT_ATTRIBUTES t
-INNER JOIN HOLLY_DB.STRUCTURED.SP500_COMPANIES s ON t.PRIMARY_TICKER = s.SYMBOL;
+INNER JOIN HOLLY_DB.STRUCTURED.SP500_COMPANIES s ON t.PRIMARY_TICKER = s.SYMBOL
+WHERE t.EVENT_TIMESTAMP >= '2024-01-01';
 
 ALTER TABLE HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS SET CHANGE_TRACKING = TRUE;
 
@@ -67,14 +71,10 @@ WHERE r.FILED_DATE >= '2025-01-01'
   AND r.FORM_TYPE IN ('8-K', '10-K', '10-Q');
 
 ALTER TABLE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS SET CHANGE_TRACKING = TRUE;
-ALTER TABLE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS CLUSTER BY (COMPANY_NAME, FILED_DATE);
 
 -- ============================================================================
 -- 3. CREATE CORTEX SEARCH SERVICES
 -- ============================================================================
-
--- Scale up for Cortex Search indexing (most time-consuming step)
-ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = '4X-LARGE';
 
 -- 3.1 SEC Filings Search
 CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_SEARCH
