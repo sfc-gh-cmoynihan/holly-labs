@@ -101,6 +101,9 @@ instructions:
     - question: "Compare the risk factors in Microsoft and Google's latest 10-K filings"
     - question: "What did Jensen Huang say about data center demand?"
     - question: "What guidance did Amazon give in their latest earnings call?"
+    - question: "Summarise the latest NVIDIA 10-K"
+    - question: "What are the financials announced in Microsoft's latest 8-K?"
+    - question: "What did Apple's CEO say about AI strategy in their most recent earnings call?"
 
 tools:
   - tool_spec:
