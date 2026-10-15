@@ -86,6 +86,9 @@ instructions:
     - Always state the time period and data freshness.
 
   sample_questions:
+    - question: "Summarise the latest NVIDIA 10-K"
+    - question: "What are the financials announced in Microsoft's latest 8-K?"
+    - question: "What did Apple's CEO say about AI strategy in their most recent earnings call?"
     - question: "Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months"
     - question: "Show a bar chart of the top 5 best performing stocks over the last 3 months"
     - question: "What is the latest share price of NVIDIA?"
@@ -101,9 +104,6 @@ instructions:
     - question: "Compare the risk factors in Microsoft and Google's latest 10-K filings"
     - question: "What did Jensen Huang say about data center demand?"
     - question: "What guidance did Amazon give in their latest earnings call?"
-    - question: "Summarise the latest NVIDIA 10-K"
-    - question: "What are the financials announced in Microsoft's latest 8-K?"
-    - question: "What did Apple's CEO say about AI strategy in their most recent earnings call?"
 
 tools:
   - tool_spec:
