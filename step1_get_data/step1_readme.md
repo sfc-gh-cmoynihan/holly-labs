@@ -12,7 +12,7 @@ Click on **Start trial**.
 
 Complete your profile to get data products.
 
-![Complete your profile](images/3.png)
+![Complete your profile](images/3_profile.png)
 
 You should see **Ready to Use**. Click on **Query Data**.
 
