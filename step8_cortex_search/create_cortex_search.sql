@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
--- Date: 15-Oct-2026
--- Version: 1.0
+-- Date: 19-Oct-2026
+-- Version: 1.1
 
 /*
 ================================================================================
@@ -8,7 +8,9 @@
   
   Create EDGAR filings and public transcripts tables from Cybersyn/SEC data,
   then build Cortex Search Services for semantic search over both.
-  Runtime: ~5-10 minutes (runs on 4X-LARGE throughout)
+  Runtime: ~10-15 minutes (runs on 4X-LARGE throughout)
+  NOTE: The two CREATE CORTEX SEARCH SERVICE statements are slow (~3 min and
+  ~7 min). This is expected - do not cancel or re-run them.
 ================================================================================
 */
 
@@ -76,7 +78,7 @@ ALTER TABLE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS SET CHANGE_TRACKING = TRUE;
 -- 3. CREATE CORTEX SEARCH SERVICES
 -- ============================================================================
 
--- 3.1 SEC Filings Search
+-- 3.1 SEC Filings Search (expect ~3 minutes to build the index)
 CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS_SEARCH
     ON ANNOUNCEMENT_TEXT
     ATTRIBUTES COMPANY_NAME, ANNOUNCEMENT_TYPE, FILED_DATE, FISCAL_PERIOD, FISCAL_YEAR, ITEM_NUMBER, ITEM_TITLE
@@ -87,7 +89,7 @@ AS (
     FROM HOLLY_DB.SEMI_STRUCTURED.EDGAR_FILINGS
 );
 
--- 3.2 Public Transcripts Search
+-- 3.2 Public Transcripts Search (expect ~7 minutes to build the index)
 CREATE OR REPLACE CORTEX SEARCH SERVICE HOLLY_DB.UNSTRUCTURED.PUBLIC_TRANSCRIPTS_SEARCH
     ON TRANSCRIPT_TEXT
     ATTRIBUTES COMPANY_NAME, PRIMARY_TICKER, EVENT_TYPE, FISCAL_PERIOD, FISCAL_YEAR

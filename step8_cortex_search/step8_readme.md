@@ -50,6 +50,8 @@ Run `create_cortex_search.sql`. The script:
 4. Creates two Cortex Search Services
 5. Scales back down to MEDIUM
 
+> **Heads up — expect a wait.** Each `CREATE CORTEX SEARCH SERVICE` statement builds the full vector index before it returns. In testing, `EDGAR_FILINGS_SEARCH` took **~3 minutes** and `PUBLIC_TRANSCRIPTS_SEARCH` took **~7 minutes**. This is normal — don't cancel or re-run the statements while they're in progress.
+
 ### Search Services Created
 
 | Service | Schema | Search Column | Attributes | Embedding Model | Rows |

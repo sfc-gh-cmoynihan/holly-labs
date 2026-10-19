@@ -56,7 +56,7 @@ When you save an artifact:
 #### 1. Generate a Chart
 
 In CoWork, ask Holly:
-> "Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months"
+> Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months
 
 Holly uses the STOCK_PRICES tool (backed by the Interactive Table via HOLLY_IW) to generate a line chart with sub-second latency.
 
@@ -87,7 +87,7 @@ From any saved artifact, click **"Ask a follow-up"** to:
 - Drill into a specific time period
 - Compare different tickers
 - Change the chart type
-- Ask "what happened on this date?" about a specific data point
+- Ask *what happened on this date?* about a specific data point
 
 ### Artifact Behaviors
 
@@ -103,16 +103,16 @@ From any saved artifact, click **"Ask a follow-up"** to:
 
 Try saving these as artifacts for your daily workflow:
 
-1. **"Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 3 months"**
+1. **Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 3 months**
    → Daily monitoring chart
 
-2. **"Show a bar chart of the top 10 best performing stocks over the last month"**
+2. **Show a bar chart of the top 10 best performing stocks over the last month**
    → Weekly performance review
 
-3. **"Chart the EUR/USD exchange rate over the last 6 months"**
+3. **Chart the EUR/USD exchange rate over the last 6 months**
    → FX monitoring
 
-4. **"Compare the stock price of Microsoft and Google over the last 6 months"**
+4. **Compare the stock price of Microsoft and Google over the last 6 months**
    → Competitive analysis
 
 ---
@@ -157,7 +157,7 @@ sequenceDiagram
 **Method 1: Conversationally (recommended)**
 
 1. Open CoWork and ask Holly a question
-2. After Holly returns the result, say: *"Send me this report every Monday at 9am"*
+2. After Holly returns the result, say: *Send me this report every Monday at 9am*
 3. CoWork confirms the schedule and first delivery date
 
 **Method 2: From the Automations tab**
@@ -175,9 +175,9 @@ These map to the first four sample questions in Holly's agent definition. For ea
 
 **Automation 1: Tech Stock Tracker** (Daily)
 
-> Ask Holly: **"Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months"**
+> Ask Holly: **Plot the closing price of MSFT, AMZN, GOOGL, NVDA over the last 6 months**
 
-After the chart renders, say: *"Send me this report every weekday at 8am"*
+After the chart renders, say: *Send me this report every weekday at 8am*
 
 | Field | Value |
 |-------|-------|
@@ -189,9 +189,9 @@ After the chart renders, say: *"Send me this report every weekday at 8am"*
 
 **Automation 2: Top Performers Chart** (Weekly)
 
-> Ask Holly: **"Show a bar chart of the top 5 best performing stocks over the last 3 months"**
+> Ask Holly: **Show a bar chart of the top 5 best performing stocks over the last 3 months**
 
-After the chart renders, say: *"Send me this report every Monday at 9am"*
+After the chart renders, say: *Send me this report every Monday at 9am*
 
 | Field | Value |
 |-------|-------|
@@ -203,9 +203,9 @@ After the chart renders, say: *"Send me this report every Monday at 9am"*
 
 **Automation 3: NVIDIA Price Check** (Daily)
 
-> Ask Holly: **"What is the latest share price of NVIDIA?"**
+> Ask Holly: **What is the latest share price of NVIDIA?**
 
-After the result, say: *"Send me this report every weekday at 7am"*
+After the result, say: *Send me this report every weekday at 7am*
 
 | Field | Value |
 |-------|-------|
@@ -217,9 +217,9 @@ After the result, say: *"Send me this report every weekday at 7am"*
 
 **Automation 4: Microsoft vs Google Comparison** (Weekly)
 
-> Ask Holly: **"Compare the stock price of Microsoft and Google over the last 6 months"**
+> Ask Holly: **Compare the stock price of Microsoft and Google over the last 6 months**
 
-After the chart renders, say: *"Send me this report every Monday at 8am"*
+After the chart renders, say: *Send me this report every Monday at 8am*
 
 | Field | Value |
 |-------|-------|
@@ -235,11 +235,11 @@ You can manage automations conversationally in CoWork or from the **Automations 
 
 | Action | Conversational | Automations Tab |
 |--------|---------------|-----------------|
-| List automations | *"What automations do I have?"* | View the list directly |
-| Change schedule | *"Change my Monday report to 7am instead"* | Edit the automation |
-| Pause | *"Pause the NVIDIA Price Check report"* | Toggle pause |
-| Resume | *"Resume the NVIDIA Price Check report"* | Toggle resume |
-| Delete | *"Delete my weekly top performers report"* | Delete button |
+| List automations | *What automations do I have?* | View the list directly |
+| Change schedule | *Change my Monday report to 7am instead* | Edit the automation |
+| Pause | *Pause the NVIDIA Price Check report* | Toggle pause |
+| Resume | *Resume the NVIDIA Price Check report* | Toggle resume |
+| Delete | *Delete my weekly top performers report* | Delete button |
 
 ### Key Points
 
@@ -271,9 +271,9 @@ You can manage automations conversationally in CoWork or from the **Automations 
 
 ## Verify It Worked
 
-1. Open **Snowflake CoWork** and ask Holly: "What is the latest share price of NVIDIA?"
+1. Open **Snowflake CoWork** and ask Holly: What is the latest share price of NVIDIA?
 2. After Holly responds, click **Save as artifact** — confirm it appears in your Artifacts list
-3. Create an automation by saying: "Send me this report every Monday at 9am" — confirm the schedule is created
+3. Create an automation by saying: Send me this report every Monday at 9am — confirm the schedule is created
 4. Check the **Automations** tab in the left navigation to see your scheduled automation
 
 ## Next Step
