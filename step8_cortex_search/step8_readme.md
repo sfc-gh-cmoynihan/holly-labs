@@ -46,7 +46,7 @@ Run `create_cortex_search.sql`. The script:
 
 1. Creates the `PUBLIC_TRANSCRIPTS` table from Cybersyn marketplace data joined with S&P 500 companies
 2. Enables change tracking for incremental refresh
-3. Scales the warehouse to 4X-LARGE for initial indexing
+3. Scales the warehouse to 2X-LARGE for initial indexing
 4. Creates two Cortex Search Services
 5. Scales back down to MEDIUM
 

@@ -1,6 +1,6 @@
 -- Author: Colm Moynihan
--- Date: 19-Oct-2026
--- Version: 1.1
+-- Date: 20-Oct-2026
+-- Version: 1.2
 
 /*
 ================================================================================
@@ -8,7 +8,7 @@
   
   Create EDGAR filings and public transcripts tables from Cybersyn/SEC data,
   then build Cortex Search Services for semantic search over both.
-  Runtime: ~10-15 minutes (runs on 4X-LARGE throughout)
+  Runtime: ~10-15 minutes (runs on 2X-LARGE throughout)
   NOTE: The two CREATE CORTEX SEARCH SERVICE statements are slow (~3 min and
   ~7 min). This is expected - do not cancel or re-run them.
 ================================================================================
@@ -17,8 +17,9 @@
 USE ROLE ACCOUNTADMIN;
 USE WAREHOUSE HOLLY_WH;
 
--- Scale up for the entire step (CTAS + indexing)
-ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = '4X-LARGE';
+-- Scale up for the entire step (CTAS + indexing).
+-- Larger sizes give little extra speed: most time is spent in managed embedding.
+ALTER WAREHOUSE HOLLY_WH SET WAREHOUSE_SIZE = '2X-LARGE';
 
 CREATE SCHEMA IF NOT EXISTS HOLLY_DB.UNSTRUCTURED;
 CREATE SCHEMA IF NOT EXISTS HOLLY_DB.SEMI_STRUCTURED;
